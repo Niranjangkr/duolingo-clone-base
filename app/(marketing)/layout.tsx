@@ -12,7 +12,7 @@ const MarketingLayout = ({ children }: PropsWithChildren) => {
         {children}
       </main>
 
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 };

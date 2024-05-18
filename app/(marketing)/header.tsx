@@ -24,7 +24,7 @@ export const Header = () => {
           <Image src="/mascot.svg" alt="Mascot" height={40} width={40} />
 
           <h1 className="text-2xl font-extrabold tracking-wide text-green-600">
-            Lingo
+             Monaito
           </h1>
         </Link>
 
@@ -49,7 +49,7 @@ export const Header = () => {
               </SignInButton>
             </SignedOut>
 
-            <Link
+            {/* <Link
               href={links.sourceCode}
               target="_blank"
               rel="noreferrer noopener"
@@ -61,7 +61,7 @@ export const Header = () => {
                 height={20}
                 width={20}
               />
-            </Link>
+            </Link> */}
           </ClerkLoaded>
         </div>
       </div>

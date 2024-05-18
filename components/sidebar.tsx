@@ -24,12 +24,13 @@ export const Sidebar = ({ className }: SidebarProps) => {
           <Image src="/mascot.svg" alt="Mascot" height={40} width={40} />
 
           <h1 className="text-2xl font-extrabold tracking-wide text-green-600">
-            Lingo
+             Monaito
           </h1>
         </div>
       </Link>
 
       <div className="flex flex-1 flex-col gap-y-2">
+        <SidebarItem label="Chat" href="/chat" iconSrc="/chat.png" />
         <SidebarItem label="Learn" href="/learn" iconSrc="/learn.svg" />
         <SidebarItem
           label="Leaderboard"

@@ -1,17 +1,17 @@
 <a name="readme-top"></a>
 
-# Lingo - Interactive platform for language learning.
+#  Monaito - Interactive platform for language learning.
 
-![Lingo - Interactive platform for language learning.](/.github/images/img_main.png "Lingo - Interactive platform for language learning.")
+![ Monaito - Interactive platform for language learning.](/.github/images/img_main.png " Monaito - Interactive platform for language learning.")
 
 [![Ask Me Anything!](https://flat.badgen.net/static/Ask%20me/anything?icon=github&color=black&scale=1.01)](https://github.com/sanidhyy "Ask Me Anything!")
-[![GitHub license](https://flat.badgen.net/github/license/sanidhyy/duolingo-clone?icon=github&color=black&scale=1.01)](https://github.com/sanidhyy/duolingo-clone/blob/main/LICENSE "GitHub license")
-[![Maintenance](https://flat.badgen.net/static/Maintained/yes?icon=github&color=black&scale=1.01)](https://github.com/sanidhyy/duolingo-clone/commits/main "Maintenance")
-[![GitHub branches](https://flat.badgen.net/github/branches/sanidhyy/duolingo-clone?icon=github&color=black&scale=1.01)](https://github.com/sanidhyy/duolingo-clone/branches "GitHub branches")
-[![Github commits](https://flat.badgen.net/github/commits/sanidhyy/duolingo-clone?icon=github&color=black&scale=1.01)](https://github.com/sanidhyy/duolingo-clone/commits "Github commits")
-[![GitHub issues](https://flat.badgen.net/github/issues/sanidhyy/duolingo-clone?icon=github&color=black&scale=1.01)](https://github.com/sanidhyy/duolingo-clone/issues "GitHub issues")
-[![GitHub pull requests](https://flat.badgen.net/github/prs/sanidhyy/duolingo-clone?icon=github&color=black&scale=1.01)](https://github.com/sanidhyy/duolingo-clone/pulls "GitHub pull requests")
-[![Vercel status](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://lingo-clone.vercel.app/ "Vercel status")
+[![GitHub license](https://flat.badgen.net/github/license/sanidhyy/duo Monaito-clone?icon=github&color=black&scale=1.01)](https://github.com/sanidhyy/duo Monaito-clone/blob/main/LICENSE "GitHub license")
+[![Maintenance](https://flat.badgen.net/static/Maintained/yes?icon=github&color=black&scale=1.01)](https://github.com/sanidhyy/duo Monaito-clone/commits/main "Maintenance")
+[![GitHub branches](https://flat.badgen.net/github/branches/sanidhyy/duo Monaito-clone?icon=github&color=black&scale=1.01)](https://github.com/sanidhyy/duo Monaito-clone/branches "GitHub branches")
+[![Github commits](https://flat.badgen.net/github/commits/sanidhyy/duo Monaito-clone?icon=github&color=black&scale=1.01)](https://github.com/sanidhyy/duo Monaito-clone/commits "Github commits")
+[![GitHub issues](https://flat.badgen.net/github/issues/sanidhyy/duo Monaito-clone?icon=github&color=black&scale=1.01)](https://github.com/sanidhyy/duo Monaito-clone/issues "GitHub issues")
+[![GitHub pull requests](https://flat.badgen.net/github/prs/sanidhyy/duo Monaito-clone?icon=github&color=black&scale=1.01)](https://github.com/sanidhyy/duo Monaito-clone/pulls "GitHub pull requests")
+[![Vercel status](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https:// Monaito-clone.vercel.app/ "Vercel status")
 
 <!-- Table of Contents -->
 <details>
@@ -44,7 +44,7 @@
 Here is the folder structure of this app.
 
 ```bash
-duolingo-clone/
+duo Monaito-clone/
   |- actions/
     |- challenge-progress.ts
     |- user-progress.ts
@@ -165,7 +165,7 @@ NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 CLERK_SECRET_KEY=sk_test_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 # neon db uri
-DATABASE_URL="postgresql://<user>:<password>@<host>:<post>/lingo?sslmode=require"
+DATABASE_URL="postgresql://<user>:<password>@<host>:<post>/ Monaito?sslmode=require"
 
 # stripe api key and webhook
 STRIPE_API_SECRET_KEY=sk_test_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
@@ -258,7 +258,7 @@ Once the script completes, check your database to ensure that the challenges dat
 
 ## :wrench: Stats
 
-[![Stats for Lingo](/.github/images/stats.svg "Stats for Lingo")](https://pagespeed.web.dev/analysis?url=https://lingo-clone.vercel.app/ "Stats for Lingo")
+[![Stats for  Monaito](/.github/images/stats.svg "Stats for  Monaito")](https://pagespeed.web.dev/analysis?url=https:// Monaito-clone.vercel.app/ "Stats for  Monaito")
 
 ## :raised_hands: Contribute
 
@@ -266,7 +266,7 @@ You might encounter some bugs while using this app. You are more than welcome to
 
 ## :gem: Acknowledgements
 
-Useful resources and dependencies that are used in Lingo.
+Useful resources and dependencies that are used in  Monaito.
 
 - Thanks to CodeWithAntonio: https://codewithantonio.com/
 - Special Thanks to Kenney Assets: https://kenney.nl/
@@ -308,7 +308,7 @@ Useful resources and dependencies that are used in Lingo.
 ## :rocket: Follow Me
 
 [![Follow Me](https://img.shields.io/github/followers/sanidhyy?style=social&label=Follow&maxAge=2592000)](https://github.com/sanidhyy "Follow Me")
-[![Tweet about this project](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Ftwitter.com%2FTechnicalShubam)](https://twitter.com/intent/tweet?text=Check+out+this+amazing+app:&url=https%3A%2F%2Fgithub.com%2Fsanidhyy%2Fduolingo-clone "Tweet about this project")
+[![Tweet about this project](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Ftwitter.com%2FTechnicalShubam)](https://twitter.com/intent/tweet?text=Check+out+this+amazing+app:&url=https%3A%2F%2Fgithub.com%2Fsanidhyy%2Fduo Monaito-clone "Tweet about this project")
 [![Subscribe to my YouTube Channel](https://img.shields.io/youtube/channel/subscribers/UCNAz_hUVBG2ZUN8TVm0bmYw)](https://www.youtube.com/@OPGAMER./?sub_confirmation=1 "Subscribe to my YouTube Channel")
 
 ## :books: Learn More
@@ -332,11 +332,11 @@ You can also give this repository a star to show more people and they can use th
 
 ## :star2: Star History
 
-<a href="https://star-history.com/#sanidhyy/duolingo-clone&Timeline">
+<a href="https://star-history.com/#sanidhyy/duo Monaito-clone&Timeline">
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=sanidhyy/duolingo-clone&type=Timeline&theme=dark" />
-  <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=sanidhyy/duolingo-clone&type=Timeline" />
-  <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=sanidhyy/duolingo-clone&type=Timeline" />
+  <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=sanidhyy/duo Monaito-clone&type=Timeline&theme=dark" />
+  <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=sanidhyy/duo Monaito-clone&type=Timeline" />
+  <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=sanidhyy/duo Monaito-clone&type=Timeline" />
 </picture>
 </a>
 
