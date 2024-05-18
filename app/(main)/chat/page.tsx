@@ -1,17 +1,18 @@
 "use client"
 
 import { Sidebar } from '@/components/layout/chat/sidebar'
+
 import React, { useEffect, useRef, useState } from 'react'
 import { Header } from '@/components/layout/chat/Header'
 import Dictaphone from '@/components/layout/chat/Dictaphone'
 import { LoadingCircle, SendIcon } from '@/public/img/icons/icon'
 import Textarea from "react-textarea-autosize";
 import clsx from 'clsx';
+
 import { Markdown } from '@/components/layout/chat/markdown'
 import { role } from '@/store/config'
 import ChatActions from '@/components/interfaces/chat/ChatActions'
 import { useChat } from "ai/react"
-import { Bot, UserIcon } from 'lucide-react'
 
 interface RenderMessages {
   content: string;
@@ -158,7 +159,7 @@ const page = () => {
             <div className={clsx(
               "absolute inset-y-0 right-14 rounded-full my-auto flex h-8 w-8 items-center justify-center  transition-all hover:bg-gray-200 "
             )}>
-              <Dictaphone setPlaceHolder={setPlaceHolder} input={input} setInput={setInput} />
+              <Dictaphone setPlaceHolder={setPlaceHolder} setInput={setInput} />
             </div>
 
             <button

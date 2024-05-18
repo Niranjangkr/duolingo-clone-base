@@ -1,55 +1,58 @@
+import React from "react";
+
 import ReactMarkdown from "react-markdown";
 import "katex/dist/katex.min.css";
-import RemarkMath from "remark-math";
 import RemarkBreaks from "remark-breaks";
 import RehypeKatex from "rehype-katex";
 import RemarkGfm from "remark-gfm";
 import RehypeHighlight from "rehype-highlight";
+import RemarkMath from "remark-math";
 import { useRef, useState, RefObject, useEffect, useMemo } from "react";
-import { copyToClipboard } from "@/lib/utils"; 
-import mermaid from "mermaid";
-
-import { ThreeDotsLoading } from "@/public/img/icons/icon";
-import React from "react";
 import { useDebouncedCallback } from "use-debounce";
 
-export function Mermaid(props: { code: string }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [hasError, setHasError] = useState(false);
+import { copyToClipboard } from "@/lib/utils"; 
 
-  useEffect(() => {
-    if (props.code && ref.current) {
-      mermaid
-        .run({
-          nodes: [ref.current],
-          suppressErrors: true,
-        })
-        .catch((e) => {
-          setHasError(true);
-          console.error("[Mermaid] ", e.message);
-        });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.code]);
+// import mermaid from "mermaid";
 
-  if (hasError) {
-    return null;
-  }
+import { ThreeDotsLoading } from "@/public/img/icons/icon";
 
-  return (
-    <div
-      className="no-dark mermaid"
-      style={{
-        cursor: "pointer",
-        overflow: "auto",
-      }}
-      ref={ref}
-      onClick={() => console.log("Hi")}
-    >
-      {props.code}
-    </div>
-  );
-}
+// export function Mermaid(props: { code: string }) {
+//   const ref = useRef<HTMLDivElement>(null);
+//   const [hasError, setHasError] = useState(false);
+
+//   useEffect(() => {
+//     if (props.code && ref.current) {
+//       mermaid
+//         .run({
+//           nodes: [ref.current],
+//           suppressErrors: true,
+//         })
+//         .catch((e) => {
+//           setHasError(true);
+//           console.error("[Mermaid] ", e.message);
+//         });
+//     }
+//     // eslint-disable-next-line react-hooks/exhaustive-deps
+//   }, [props.code]);
+
+//   if (hasError) {
+//     return null;
+//   }
+
+//   return (
+//     <div
+//       className="no-dark mermaid"
+//       style={{
+//         cursor: "pointer",
+//         overflow: "auto",
+//       }}
+//       ref={ref}
+//       onClick={() => console.log("Hi")}
+//     >
+//       {props.code}
+//     </div>
+//   );
+// }
 
 export function PreCode(props: { children: any }) {
   const ref = useRef<HTMLPreElement>(null);
@@ -71,9 +74,9 @@ export function PreCode(props: { children: any }) {
 
   return (
     <>
-      {mermaidCode.length > 0 && (
+      {/* {mermaidCode.length > 0 && (
         <Mermaid code={mermaidCode} key={mermaidCode} />
-      )}
+      )} */}
       <pre ref={ref}>
         <span
           className="copy-code-button"
@@ -144,6 +147,7 @@ function _MarkDownContent(props: { content: string }) {
         ],
       ]}
       components={{
+        // @ts-ignore
         pre: PreCode,
         p: (pProps) => <p {...pProps} dir="auto" />,
         a: (aProps) => {

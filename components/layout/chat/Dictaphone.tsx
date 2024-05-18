@@ -4,16 +4,18 @@ import "core-js/stable";
 import "regenerator-runtime/runtime";
 import React from 'react';
 import { useEffect, useState } from "react";
-import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
 import { Mic } from "lucide-react";
 
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
+
+
 interface Props {
-  input: string;
+  // input: string;
   setInput: React.Dispatch<React.SetStateAction<string>>;
   setPlaceHolder: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const Dictaphone = ({ input, setInput, setPlaceHolder }: Props) => {
+const Dictaphone = ({ setInput, setPlaceHolder }: Props) => {
   const { transcript, listening, resetTranscript, browserSupportsSpeechRecognition } = useSpeechRecognition();
   const [mounted, setIsMounted] = useState(false);
 

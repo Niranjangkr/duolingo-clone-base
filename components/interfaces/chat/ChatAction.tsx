@@ -1,6 +1,7 @@
 "use client"
 
 import Image from 'next/image';
+
 import React, { useRef, useState } from 'react'
 
 const ChatAction = ({ text, icon: Icon, onClick }: {
@@ -46,9 +47,9 @@ const ChatAction = ({ text, icon: Icon, onClick }: {
             <div ref={iconRef} className={"chat-input-actions > icon rounded-xl border p-2 cursor-pointer"}>
                <Image src={Icon} alt='icon' />
             </div>
-            {/* <div className={""} ref={textRef}>
+            <div className={"invisible hidden"} ref={textRef}>
                 {text}
-            </div> */}
+            </div>
         </div>
     );
 }
