@@ -1,11 +1,13 @@
 "use client"
 
+import React, { useRef, useState } from 'react'
+
 import Image from 'next/image';
 
-import React, { useRef, useState } from 'react'
 
 const ChatAction = ({ text, icon: Icon, onClick }: {
     text: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     icon: any;
     onClick: () => void;
 }) => {
@@ -45,6 +47,7 @@ const ChatAction = ({ text, icon: Icon, onClick }: {
             }
         >
             <div ref={iconRef} className={"chat-input-actions > icon rounded-xl border p-2 cursor-pointer"}>
+            {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
                <Image src={Icon} alt='icon' />
             </div>
             <div className={"invisible hidden"} ref={textRef}>

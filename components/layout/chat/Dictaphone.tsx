@@ -47,10 +47,14 @@ const Dictaphone = ({ setInput, setPlaceHolder }: Props) => {
       <Mic 
         onClick={() => {
           if (listening) {
-              SpeechRecognition.stopListening();
+              SpeechRecognition.stopListening()
+              .then(data => console.log(data))
+              .catch((e) => console.error(e))
               setPlaceHolder(`Enter your task for ${Date().toString().slice(0, 15)}`);
           } else {
-              SpeechRecognition.startListening();
+              SpeechRecognition.startListening()
+              .then((data) => console.log(data))
+              .catch(e => console.log(e))
               setPlaceHolder('Listening...');
           }
         }}

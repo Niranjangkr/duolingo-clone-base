@@ -13,6 +13,7 @@ const ChatActions = () => {
       <ChatAction
         onClick={() => console.log("promptHints")}
         text={"Prompts"}
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         icon={PromptIcon }
       />
 
@@ -21,11 +22,13 @@ const ChatActions = () => {
          console.log("masks")
         }}
         text={"Masks"}
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         icon={MaskIcon}
       />
 
       <ChatAction
         text={"Clear Context"}
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         icon={BreakIcon}
         onClick={() => console.log("clear context")}
       />

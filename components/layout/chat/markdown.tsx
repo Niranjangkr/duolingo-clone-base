@@ -7,10 +7,10 @@ import RehypeKatex from "rehype-katex";
 import RemarkGfm from "remark-gfm";
 import RehypeHighlight from "rehype-highlight";
 import RemarkMath from "remark-math";
-import { useRef, useState, RefObject, useEffect, useMemo } from "react";
-import { useDebouncedCallback } from "use-debounce";
+import { useRef, RefObject, useMemo } from "react";
+// import { useDebouncedCallback } from "use-debounce";
 
-import { copyToClipboard } from "@/lib/utils"; 
+// import { copyToClipboard } from "@/lib/utils"; 
 
 // import mermaid from "mermaid";
 
@@ -54,23 +54,24 @@ import { ThreeDotsLoading } from "@/public/img/icons/icon";
 //   );
 // }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function PreCode(props: { children: any }) {
   const ref = useRef<HTMLPreElement>(null);
-  const refText = ref.current?.innerText;
-  const [mermaidCode, setMermaidCode] = useState("");
+  // const refText = ref.current?.innerText;
+  // const [mermaidCode, setMermaidCode] = useState("");
 
-  const renderMermaid = useDebouncedCallback(() => {
-    if (!ref.current) return;
-    const mermaidDom = ref.current.querySelector("code.language-mermaid");
-    if (mermaidDom) {
-      setMermaidCode((mermaidDom as HTMLElement).innerText);
-    }
-  }, 600);
+  // const renderMermaid = useDebouncedCallback(() => {
+  //   if (!ref.current) return;
+  //   const mermaidDom = ref.current.querySelector("code.language-mermaid");
+  //   if (mermaidDom) {
+  //     setMermaidCode((mermaidDom as HTMLElement).innerText);
+  //   }
+  // }, 600);
 
-  useEffect(() => {
-    setTimeout(renderMermaid, 1);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [refText]);
+  // useEffect(() => {
+  //   setTimeout(renderMermaid, 1);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [refText]);
 
   return (
     <>
@@ -83,7 +84,8 @@ export function PreCode(props: { children: any }) {
           onClick={() => {
             if (ref.current) {
               const code = ref.current.innerText;
-              copyToClipboard(code);
+              console.log(code);
+              // await copyToClipboard(code);
             }
           }}
         ></span>
@@ -115,8 +117,11 @@ function escapeBrackets(text: string) {
     /(```[\s\S]*?```|`.*?`)|\\\[([\s\S]*?[^\\])\\\]|\\\((.*?)\\\)/g;
   return text.replace(
     pattern,
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     (match, codeBlock, squareBracket, roundBracket) => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       if (codeBlock) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return codeBlock;
       } else if (squareBracket) {
         return `$$${squareBracket}$$`;
@@ -147,7 +152,7 @@ function _MarkDownContent(props: { content: string }) {
         ],
       ]}
       components={{
-        // @ts-ignore
+        // @ts-expect-error for testing
         pre: PreCode,
         p: (pProps) => <p {...pProps} dir="auto" />,
         a: (aProps) => {
