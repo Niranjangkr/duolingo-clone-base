@@ -1,19 +1,16 @@
-import React from "react";
+"use client"
+
+import React, { useRef, RefObject, useMemo } from "react";
 
 import ReactMarkdown from "react-markdown";
 import "katex/dist/katex.min.css";
-import RemarkBreaks from "remark-breaks";
-import RehypeKatex from "rehype-katex";
-import RemarkGfm from "remark-gfm";
 import RehypeHighlight from "rehype-highlight";
+import RehypeKatex from "rehype-katex";
+import RemarkBreaks from "remark-breaks"; // Moved after rehype dependencies
+import RemarkGfm from "remark-gfm";
 import RemarkMath from "remark-math";
-import { useRef, RefObject, useMemo } from "react";
-// import { useDebouncedCallback } from "use-debounce";
 
-// import { copyToClipboard } from "@/lib/utils"; 
-
-// import mermaid from "mermaid";
-
+import { copyToClipboard } from "@/lib/utils";
 import { ThreeDotsLoading } from "@/public/img/icons/icon";
 
 // export function Mermaid(props: { code: string }) {
@@ -85,7 +82,9 @@ export function PreCode(props: { children: any }) {
             if (ref.current) {
               const code = ref.current.innerText;
               console.log(code);
-              // await copyToClipboard(code);
+              copyToClipboard(code)
+              .then(() => console.log("copied"))
+              .catch((e) => console.error("something went wrong", e));
             }
           }}
         ></span>
@@ -159,7 +158,7 @@ function _MarkDownContent(props: { content: string }) {
           const href = aProps.href || "";
           const isInternal = /^\/#/i.test(href);
           const target = isInternal ? "_self" : aProps.target ?? "_blank";
-          return <a {...aProps} target={target} />;
+          return <a {...aProps} style={{ textDecoration: 'underline', color: 'blue' }} target={target} />;
         },
       }}
     >

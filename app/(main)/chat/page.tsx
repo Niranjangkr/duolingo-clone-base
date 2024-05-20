@@ -1,91 +1,69 @@
 "use client"
 
-import React, { useRef, useState } from 'react';
-import Textarea from "react-textarea-autosize";
+import React, { FormEvent, useEffect, useRef, useState } from 'react';
+
+// import { useAssistant, useChat } from "ai/react";
 import clsx from 'clsx';
+import Textarea from "react-textarea-autosize";
 
-import { LoadingCircle, SendIcon } from '@/public/img/icons/icon';
-
-import { Sidebar } from '@/components/layout/chat/sidebar';
-import { Header } from '@/components/layout/chat/Header';
-import Dictaphone from '@/components/layout/chat/Dictaphone';
-import { Markdown } from '@/components/layout/chat/markdown';
 import ChatActions from '@/components/interfaces/chat/ChatActions';
-
-import { useChat } from "ai/react";
-// import { role } from '@/store/config';
-
-// interface RenderMessages {
-//   content: string;
-//   role: role;
-// }
-
-// const demoMessages = [
-//     {
-//         content: "Hi",
-//         role: "user",
-//         createdAt: "2024-05-18T02:17:18.081Z",
-//         id: "e8i0Fcf"
-//     },
-//     {
-//         id: "J5Oop22",
-//         role: "assistant",
-//         content: "Hello! How can I assist you today?",
-//         createdAt: "2024-05-18T02:17:19.880Z"
-//     },
-//     {
-//         content: "I want to learn about rust programming language",
-//         role: "user",
-//         createdAt: "2024-05-18T02:17:32.422Z",
-//         id: "O3Xo71f"
-//     },
-//     {
-//         id: "nyiz8yH",
-//         role: "assistant",
-//         content: "That's great! Rust is a modern, high-performance, systems programming language created by Mozilla. It aims to provide the speed and control of low-level programming with the strong safety guarantees of high-level languages. \n\nHere's a roadmap to help you learn Rust:\n\n1. **Getting Started:**\n   - Install Rust by following the instructions on the official website: [Rust Install Guide](https://www.rust-lang.org/learn/get-started)\n   - Once Rust is installed, you can write your first \"Hello, World!\" program by following the examples in the Rust Book.\n\n2. **Rust Programming Basics:**\n   - Read \"The Rust Programming Language\" book (also known as the Rust Book): [Rust Book](https://doc.rust-lang.org/book/)\n   - Learn about basic syntax, variables, data types, functions, control flow, error handling, and more.\n\n3. **Ownership, Borrowing, and Lifetimes:**\n   - Rust's unique feature is its memory safety without a garbage collector. Study ownership rules, borrowing, and how Rust ensures memory safety at compile time by preventing data races and null pointer dereferencing.\n   - Read the chapter on \"Ownership\" in the Rust Book and the official Rust documentation on lifetimes: [Rust Lifetimes Documentation](https://doc.rust-lang.org/book/ch10-00-generics.html)\n\n4. **Advanced Concepts:**\n   - Once you are comfortable with the basics, dive deeper into advanced topics like Traits (similar to interfaces in other languages), Generics, Pattern Matching, Concurrency, and Asynchronous Programming.\n\n5. **Projects and Practice:**\n   - Practice by working on small projects or contributing to open-source Rust projects on platforms like GitHub.\n   - Solve coding challenges on platforms like LeetCode, Exercism, or Advent of Code using Rust.\n\n6. **Community and Resources:**\n   - Join the Rust community on forums like the Rust Users Forum, Reddit's r/rust subreddit, or the Rust Discord channel to ask questions, get help, and stay updated on Rust developments.\n   - Follow Rustaceans on Twitter and read Rust-related blogs to keep up with the latest news and best practices.\n\nRemember, learning Rust, like any programming language, is a journey. Don't hesitate to ask if you have specific questions or need further clarification on any Rust concept. Happy coding!",
-//         createdAt: "2024-05-18T02:17:33.263Z"
-//     }
-// ]
+import Dictaphone from '@/components/layout/chat/Dictaphone';
+import { Header } from '@/components/layout/chat/Header';
+import { Markdown } from '@/components/layout/chat/markdown';
+import { Sidebar } from '@/components/layout/chat/sidebar';
+import { LoadingCircle, SendIcon } from '@/public/img/icons/icon';
+import { toast } from 'sonner';
+import { useAssistant } from '@/app/hooks/useAssistant';
 
 const Page = () => {
-  // const inputRef = useRef<HTMLTextAreaElement>(null);
-  // const [userInput, setUserInput] = useState("");
   const [placeholder, setPlaceHolder] = useState<string>(`Enter here...`);
   const formRef = useRef<HTMLFormElement>(null);
   const disabled = false; //TODO: make it a state
+  const [currentThreadId, setCurrentThreadId] = useState<string | undefined>();
 
-  // const getCurrentTime = () => {
-  //   const now = new Date();
-  //   const isoString = now.toISOString();
-  //   const formattedTime = isoString.split('.')[0];
-  //   return formattedTime + "+00";
-  // }
+  // console.log(currentThreadId, ". currentThreadId. ");
 
-  const { messages, input, setInput, handleSubmit, isLoading } = useChat({
-    // body: {
-    //   birthChartDetails
-    // },
-    onResponse: (response) => {
-      if (response.status === 429) {
-        window.alert("You have reached your request limit for the day.");
-        return;
-      }
+  const { messages, input, setInput, submitMessage, threadId, status, error } = useAssistant({
+    onError(error) {
+      toast.error("something went wrong: ");
+      console.error(error);
     },
-    // onFinish: async (message) => {
-
-    //   const currentTime = getCurrentTime();
-    //   const userMessageCreatedAt = new Date();
-    //   userMessageCreatedAt.setSeconds(userMessageCreatedAt.getSeconds() - 1);
-
-    //   console.log("userMessagesCreatedAt", userMessageCreatedAt);
-    // },
+    api: "/api/chat",
+    threadId: currentThreadId
   });
-  console.log(messages)
+
+  useEffect(() => {
+    setCurrentThreadId(threadId);
+  }, [threadId]);
+
+  const handleSubmit = (event: FormEvent) => {
+    event.preventDefault();
+    submitMessage(input);
+    setInput("");
+  }
+
+  // console.log("new... ", messages, threadId)
   return (
     <div className={`w-full h-full flex`}>
       <div className='w-3/4 relative'>
         <Header title='New Conversation' totalMessages={messages.length} />
         <div className='flex-1 overflow-auto overflow-x-hidden p-5 pb-10 relative overscroll-none h-[490px] scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-white'>
+          <div
+            className={clsx(
+              "flex w-full py-4 rounded-sm ",
+            )}
+          >
+
+            <div className={`box-border relative mt-2 rounded-lg border max-w-[500px] p-3 transition-all bg-[#f2f2f2]`}>
+              <div className={`absolute -top-6 left-2}`}>
+                <div>🤖</div>
+              </div>
+              <Markdown
+                content={"Hello! How can I assist you today?"}
+                loading={false}
+              />
+            </div>
+          </div>
           {
             messages.length > 0 ?
               messages.map((message, i) => (
@@ -97,39 +75,28 @@ const Page = () => {
                   )}
                 >
 
-                  <div className={`box-border relative mt-2 rounded-lg border max-w-[500px] p-3 transition-all ${message.role === "user" ? " bg-[#e7f8ff]" : "bg-[#f2f2f2]"}`}>
+                  <div className={`box-border relative mt-2 rounded-lg border max-w-[500px] scrollbar-thin scrollbar-track-[#f2f2f2] scrollbar-thumb-gray-300 p-3 transition-all ${message.role === "user" ? " bg-[#e7f8ff]" : "bg-[#f2f2f2]"}`}>
                     <div className={`absolute -top-6 ${message.role === "user" ? "right-2" : "left-2"}`}>
                       <div>
                         {message.role === "user" ? (
-                          // <UserIcon className="" />
                           <>😊</>
                         ) : (
                           <>🤖</>
                         )}
                       </div>
                     </div>
-                    <Markdown
-                      content={message.content}
-                      loading={false}
-                      defaultShow={i >= messages.length - 6}
-                    />
+                    <div className='overflow-x-auto w-full h-full'>
+                      <Markdown
+                        content={message.content}
+                        loading={false}
+                        defaultShow={i >= messages.length - 6}
+                      />
+                    </div>
                   </div>
                 </div>
               ))
               :
-              <div>No Messages</div>
-
-            // messages.map((item, idx) => (
-            //   <div className={`${item.role === "user" ? "flex flex-row-reverse" : "flex"}`}>
-            //     <div className={`box-border mt-2 rounded-lg border max-w-[500px] p-3 transition-all ${item.role === "user" ? "flex flex-row-reverse bg-[#e7f8ff]" : "flex bg-[#f2f2f2]"}`}>
-            //     <Markdown
-            //             content={item.content}
-            //             loading={false}
-            //             defaultShow={idx >= messages.length - 6}
-            //           />
-            //     </div>
-            //   </div>
-            // ))
+              <></>
           }
         </div>
         <div className={`absolute bottom-0 flex w-full flex-col space-y-3 bg-gradient-to-b from-transparent p-5 pb-3 sm:px-0 left-0 border-t-2`}>
@@ -172,7 +139,7 @@ const Page = () => {
               )}
               disabled={disabled}
             >
-              {isLoading ? (
+              {status ? (
                 <LoadingCircle />
               ) : (
                 <SendIcon
@@ -186,9 +153,31 @@ const Page = () => {
           </form>
         </div>
       </div>
-      <Sidebar className='w-1/4 bg-[#e7f8ff] p-4 rounded-sm' />
+      <Sidebar className='w-1/4 bg-[#e7f8ff] p-4 rounded-sm' setCurrentThreadId={setCurrentThreadId} />
     </div >
   )
 }
 
 export default Page
+
+// const demoMessages = [
+//     {
+//         content: "Hi",
+//         role: "user",
+//         createdAt: "2024-05-18T02:17:18.081Z",
+//         id: "e8i0Fcf"
+//     },
+//     {
+//         id: "J5Oop22",
+//         role: "assistant",
+//         content: "Hello! How can I assist you today?",
+//         createdAt: "2024-05-18T02:17:19.880Z"
+//     },
+// ]
+
+// const getCurrentTime = () => {
+//   const now = new Date();
+//   const isoString = now.toISOString();
+//   const formattedTime = isoString.split('.')[0];
+//   return formattedTime + "+00";
+// }

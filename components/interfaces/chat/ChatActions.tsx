@@ -1,10 +1,9 @@
 "use client"
 
 import ChatAction from "./ChatAction";
-
-import MaskIcon from "../../../app/icons/mask.svg"
-import BreakIcon from "../../../app/icons/break.svg"
-import PromptIcon from "../../../app/icons/prompt.svg"
+import BreakIcon from "../../../app/icons/break.svg";
+import MaskIcon from "../../../app/icons/mask.svg";
+import PromptIcon from "../../../app/icons/prompt.svg";
 
 const ChatActions = () => {
 

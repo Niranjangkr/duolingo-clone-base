@@ -2,12 +2,11 @@
 
 import "core-js/stable";
 import "regenerator-runtime/runtime";
-import React from 'react';
-import { useEffect, useState } from "react";
+
+import React, { useEffect, useState } from 'react';
+
 import { Mic } from "lucide-react";
-
-import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
-
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 
 interface Props {
   // input: string;
