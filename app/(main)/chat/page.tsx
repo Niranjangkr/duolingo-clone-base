@@ -2,47 +2,69 @@
 
 import React, { FormEvent, useEffect, useRef, useState } from 'react';
 
-// import { useAssistant, useChat } from "ai/react";
+import axios from 'axios';
 import clsx from 'clsx';
 import Textarea from "react-textarea-autosize";
+import { toast } from 'sonner';
 
+import { useAssistant } from '@/app/hooks/useAssistant';
 import ChatActions from '@/components/interfaces/chat/ChatActions';
 import Dictaphone from '@/components/layout/chat/Dictaphone';
 import { Header } from '@/components/layout/chat/Header';
 import { Markdown } from '@/components/layout/chat/markdown';
-import { Sidebar } from '@/components/layout/chat/sidebar';
+import { Sidebar, foldersType } from '@/components/layout/chat/sidebar';
 import { LoadingCircle, SendIcon } from '@/public/img/icons/icon';
-import { toast } from 'sonner';
-import { useAssistant } from '@/app/hooks/useAssistant';
+import { FolderCreateResponse, folderCreateResponse } from '@/types';
+
+import Loading from './loading';
 
 const Page = () => {
   const [placeholder, setPlaceHolder] = useState<string>(`Enter here...`);
   const formRef = useRef<HTMLFormElement>(null);
   const disabled = false; //TODO: make it a state
   const [currentThreadId, setCurrentThreadId] = useState<string | undefined>();
+  const [selectedFolderId, setSelectedFolderId] = useState<number | undefined>();
+  const [foldersData, setFoldersData] = useState<foldersType[] | null>(null);
 
-  // console.log(currentThreadId, ". currentThreadId. ");
-
-  const { messages, input, setInput, submitMessage, threadId, status, error } = useAssistant({
+  const { messages, input, setInput, submitMessage, threadId, loadingMessages, setThreadId, status, setMessages } = useAssistant({
     onError(error) {
       toast.error("something went wrong: ");
       console.error(error);
     },
     api: "/api/chat",
-    threadId: currentThreadId
+    threadId: currentThreadId,
   });
 
   useEffect(() => {
     setCurrentThreadId(threadId);
   }, [threadId]);
 
-  const handleSubmit = (event: FormEvent) => {
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    submitMessage(input);
+    if (!selectedFolderId) {
+      try {
+        const res = await axios.post<FolderCreateResponse>('/api/chat/folder');
+        const data = folderCreateResponse.parse(res.data);
+
+        if (data.error) {
+          toast.error("Error!! cannot create folder");
+          console.error("Error in folder creation: ", data.error);
+        } else if (data.message) {
+          const newObj = data.message;
+          setFoldersData((prev) => prev?.length ? [...prev, newObj] : [newObj]);
+          setSelectedFolderId(newObj.id);
+          await submitMessage(input, newObj.id, currentThreadId);
+        }
+      } catch (error) {
+        console.error("Validation or network error", error);
+        toast.error("Error in creating folder. Please try again.");
+      }
+    } else {
+      await submitMessage(input, selectedFolderId, currentThreadId);
+    }
     setInput("");
   }
 
-  // console.log("new... ", messages, threadId)
   return (
     <div className={`w-full h-full flex`}>
       <div className='w-3/4 relative'>
@@ -66,6 +88,7 @@ const Page = () => {
           </div>
           {
             messages.length > 0 ?
+            loadingMessages ? <Loading /> :
               messages.map((message, i) => (
                 <div
                   key={i}
@@ -99,11 +122,14 @@ const Page = () => {
               <></>
           }
         </div>
-        <div className={`absolute bottom-0 flex w-full flex-col space-y-3 bg-gradient-to-b from-transparent p-5 pb-3 sm:px-0 left-0 border-t-2`}>
+        <div className={`absolute bottom-0 flex w-full flex-col space-y-3 bg-gradient-to-b from-transparent p-5 pb-3 sm:px-0 left-0 border-t-2 bg-white`}>
           <ChatActions />
           <form
             ref={formRef}
-            onSubmit={handleSubmit}
+            onSubmit={(event) => {
+              event.preventDefault();
+              handleSubmit(event).catch(error => console.error("Error in handleSubmit:", error));
+            }}
             className={`relative w-full max-w-screen-md rounded-xl border px-4 pb-2 pt-3 sm:pb-3 sm:pt-4 bg-white`}
           >
             <Textarea
@@ -139,7 +165,7 @@ const Page = () => {
               )}
               disabled={disabled}
             >
-              {status ? (
+              {status === "loading" ? (
                 <LoadingCircle />
               ) : (
                 <SendIcon
@@ -153,7 +179,19 @@ const Page = () => {
           </form>
         </div>
       </div>
-      <Sidebar className='w-1/4 bg-[#e7f8ff] p-4 rounded-sm' setCurrentThreadId={setCurrentThreadId} />
+      <Sidebar
+        className='w-1/4 bg-[#e7f8ff] p-3 rounded-sm'
+        setMessages={setMessages}
+        messages={messages}
+        setCurrentThreadId={setCurrentThreadId}
+        loadingMessages={loadingMessages}
+        currentThreadId={currentThreadId}
+        setSelectedFolderId={setSelectedFolderId}
+        selectedFolderId={selectedFolderId}
+        foldersData={foldersData}
+        setFoldersData={setFoldersData}
+        setThreadId={setThreadId}
+      />
     </div >
   )
 }

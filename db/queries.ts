@@ -1,11 +1,13 @@
 import { cache } from "react";
 
 import { auth } from "@clerk/nextjs";
-import { eq } from "drizzle-orm";
+import { asc, eq } from "drizzle-orm";
 
 import db from "./drizzle";
 import {
   challengeProgress,
+  chatFolders,
+  chatThreads,
   courses,
   lessons,
   units,
@@ -244,3 +246,47 @@ export const getTopTenUsers = cache(async () => {
 
   return data;
 });
+
+// chat queries
+// export const getFolders = cache(async () => {
+//   console.log("chat queris getFOlders");
+//   const { userId } = auth();
+//   if(!userId) return [];
+
+//   const data = await db.query.chatFolders.findMany({
+//     where: eq(chatFolders.userId, userId),
+//   });
+
+//   console.log("chat queris ", data);
+//   return data;
+// });
+
+// export const createFolder = async (name: string) => {
+//   const { userId } = auth();
+//   if(!userId) throw new Error("User not authenticated");
+
+//   const newFolder = await db.insert(chatFolders).values({
+//     userId,
+//     name,
+//   });
+
+//   return newFolder;
+// };
+
+export const getThreadsInFolder = cache(async (folderId: number) => {
+  const data = await db.query.chatThreads.findMany({
+    where: eq(chatThreads.folderId, folderId),
+    orderBy: (chatThreads, { desc }) => [desc(chatThreads.createdAt)]
+  });
+
+  return data;
+});
+
+// export const createThread = async (folderId: number, name: string) => {
+//   const newThread = await db.insert(chatThreads).values({
+//     folderId,
+//     name
+//   });
+
+//   return newThread;
+// }

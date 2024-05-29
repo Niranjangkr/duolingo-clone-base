@@ -10,7 +10,7 @@
     "format": "prettier --check --ignore-path .gitignore .",
     "format:fix": "prettier --write --ignore-path .gitignore .",
     "db:studio": "npx drizzle-kit studio",
-    "db:push": "npx drizzle-kit push:pg",
+    "db:push": "npx drizzle-kit push pg",
     "db:prod": "tsx ./scripts/prod.ts"
   },
   "author": {
@@ -90,6 +90,7 @@
     "core-js": "^3.37.1",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.30.4",
+    "framer-motion": "^11.2.6",
     "lucide-react": "^0.359.0",
     "mermaid": "^10.9.1",
     "next": "14.1.4",
@@ -112,7 +113,7 @@
     "remark-math": "^6.0.0",
     "sonner": "^1.4.32",
     "stripe": "^14.22.0",
-    "tailwind-merge": "^2.2.2",
+    "tailwind-merge": "^2.3.0",
     "tailwind-scrollbar": "^3.1.0",
     "tailwindcss-animate": "^1.0.7",
     "use-debounce": "^10.0.0",

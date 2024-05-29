@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server';
 import OpenAI from 'openai';
-import { fetchChatApiRequestValidator, fetchChatApiRequestResponse  } from "@/types";
+
+import { fetchChatApiRequestResponse, FetchChatApiRequest  } from "@/types";
 
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY || ''
@@ -8,24 +9,24 @@ const openai = new OpenAI({
 
 export const runtime = 'edge'
 
-interface ClientMessage {
-    threadId: string | undefined;
-    message: string;
-}
-
 export async function POST(req: NextRequest) {
-    const body = await req.json();
+    const { threadId } = (await req.json()) as FetchChatApiRequest;
     try {
-        const { threadId } = fetchChatApiRequestValidator.parse(body);
         const messages = await openai.beta.threads.messages.list(threadId);
-        const formatedMessages = messages.data;
+        const formatedMessages: OpenAI.Beta.Threads.Messages.Message[] = messages.data;
 
         const response = fetchChatApiRequestResponse.parse({
             error: undefined,
-            messages: formatedMessages.map((msg: any) => ({
+            messages: formatedMessages.map((msg) => ({
                 id: msg.id,
                 role: msg.role,
-                content: msg.content.map((c: any) => c.text.value).join(" "),
+                content: msg.content.map((c) => {
+                    if(c.type == "text"){
+                        return c.text.value
+                    }else{
+                        return "";
+                    }
+                }).join(" "),
                 created_at: msg.created_at
             }))
         })

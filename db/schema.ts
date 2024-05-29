@@ -154,3 +154,34 @@ export const userSubscription = pgTable("user_subscription", {
   stripePriceId: text("stripe_price_id").notNull(),
   stripeCurrentPeriodEnd: timestamp("stripe_current_period_end").notNull(),
 });
+
+// chat schema
+export const chatFolders = pgTable("chat_folders", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id").notNull(),
+  name: text("name").notNull().default("New Folder"),
+  createdAt: timestamp("created_at").defaultNow(),
+})
+
+export const chatThreads = pgTable("chat_threads", {
+  id: serial("id").primaryKey(),
+  threadId: text("threadId").unique(),
+  folderId: integer("folder_id")
+    .references(() => chatFolders.id, {
+      onDelete: "cascade",
+    })
+    .notNull(),
+  name: text("name").notNull().default("New Chat"),
+  createdAt: timestamp("created_at").defaultNow(),
+})
+
+export const chatFoldersRelations = relations(chatFolders, ({ many }) => ({
+  chatThreads: many(chatThreads),
+}))
+
+export const chatThreadsRelations = relations(chatThreads, ({ one }) => ({
+  chatFolders: one(chatFolders, {
+    fields: [chatThreads.folderId],
+    references: [chatFolders.id],
+  })
+}))

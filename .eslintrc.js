@@ -24,6 +24,7 @@ module.exports = {
         },
       },
     ],
+    "checksVoidReturn": false
   },
   overrides: [
     {

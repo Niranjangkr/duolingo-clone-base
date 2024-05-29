@@ -1,9 +1,10 @@
-import { OpenAIStream, StreamingTextResponse, AssistantResponse } from 'ai';
+import { StreamingTextResponse, AssistantResponse } from 'ai';
 import { NextRequest } from 'next/server';
 import OpenAI from 'openai';
-import { TextContentBlock } from 'openai/resources/beta/threads/messages.mjs';
-import { Run } from 'openai/resources/beta/threads/runs/runs.mjs';
 import { v4 as uuidv4 } from 'uuid';
+
+import db from '@/db/drizzle';
+import { chatThreads } from '@/db/schema';
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY || ''
@@ -14,43 +15,63 @@ export const runtime = 'edge'
 interface ClientMessage {
   threadId: string | undefined;
   message: string;
+  folderId: number;
 }
 
 export async function POST(req: NextRequest): Promise<StreamingTextResponse> {
   const body = await req.json() as ClientMessage;
+  
+  let threadId = body.threadId;
+  let newThreadCreated = false;
 
-  const threadId = body.threadId ?? (await openai.beta.threads.create({})).id;
+  console.log(threadId, "threadId");
+  
+  if(!threadId){
+    const newThread = await openai.beta.threads.create({});
+    threadId = newThread.id;
+    newThreadCreated = true;
+  }
+
   const createdMessage = await openai.beta.threads.messages.create(threadId, {
     role: "user",
     content: body.message
   });
+
+  if(newThreadCreated){
+    const data = await db
+    .insert(chatThreads)
+    .values({
+      threadId: threadId,
+      folderId: body.folderId
+    })
+    .returning();
+
+  console.log(data);
+  }
 
   console.log("api... ", threadId, createdMessage);
 
   return AssistantResponse(
     { threadId, messageId: createdMessage.id },
     async ({ sendMessage }) => {
-      const run = await openai.beta.threads.runs.stream(threadId, {
+      const run = openai.beta.threads.runs.stream(threadId, {
         assistant_id: process.env.ASSISTANT_ID ??
           (() => {
             throw new Error("ASSISTANT_ID is not set")
           })(),
       });
 
-      // const messagesTest = await openai.beta.threads.messages.list(threadId);
-      // console.log("messageTest", messagesTest.data, "raw", messagesTest);
-
       run
-        .on('textCreated', (text) => {
+        .on('textCreated', () => {
           return process?.stdout?.write('\nassistant > ')
         })
-        .on('textDelta', (textDelta, snapshot) => sendMessage({
+        .on('textDelta', (textDelta) => sendMessage({
           id: uuidv4(),
           role: "assistant",
           content: [{ type: "text", text: { value: textDelta.value || "" } }]
         }))
         .on('toolCallCreated', (toolCall) => process?.stdout?.write(`\nassistant > ${toolCall.type}\n\n`))
-        .on('toolCallDelta', (toolCallDelta, snapshot) => {
+        .on('toolCallDelta', (toolCallDelta) => {
           if (toolCallDelta.type === 'code_interpreter') {
             if (toolCallDelta?.code_interpreter?.input) {
               process?.stdout?.write(toolCallDelta.code_interpreter.input);
