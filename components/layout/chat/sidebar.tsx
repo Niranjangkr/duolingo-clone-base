@@ -16,7 +16,7 @@ interface Thread {
     threadId: string | null;
     id: number;
     name: string;
-    createdAt: Date | null
+    createdAt: Date | null | string | undefined
 }
 
 interface Message {
@@ -57,6 +57,7 @@ export function Sidebar(props: {
     setMessages: React.Dispatch<React.SetStateAction<Message[]>>,
     messages: Message[],
     loadingMessages: boolean,
+    status: "idle" | "loading" | "succeeded" | "failed",
     setSelectedFolderId: React.Dispatch<React.SetStateAction<number | undefined>>,
     selectedFolderId: number | undefined,
     foldersData: foldersType[] | null,
@@ -84,8 +85,9 @@ export function Sidebar(props: {
     
         try {
             const response = await axios.post<NewChatCreateResponse>('/api/chat/newchat', payload);
+            console.log('Response data:', response.data);
             const data = newChatCreateResponse.parse(response.data);
-    
+            console.log('Response data ERor:');
             if (data && data?.message && data?.message?.length > 0) {
                 const dataObj = data?.message[0];
                 setThreads(prev => (prev ? [dataObj, ...prev] : [dataObj]));
@@ -125,7 +127,7 @@ export function Sidebar(props: {
             console.error("Error in folder creation: ", data.error);
         } else if (data.message) {
             const newObj = data.message;
-            props.setFoldersData((prev) => prev?.length ? [...prev!, newObj] : [newObj])
+            props.setFoldersData((prev) => prev?.length ? [newObj, ...prev!] : [newObj])
             handleNewChat()
             props.setSelectedFolderId(newObj.id);
         }
@@ -182,7 +184,7 @@ export function Sidebar(props: {
 
         }
 
-        if (!props.loadingMessages && props.messages.length >= 2) {
+        if (!props.loadingMessages && props.messages.length >= 2 && props.status !== "loading") {
             const currentSelectedChat = threads?.filter(item => item.threadId === props.currentThreadId);
             let currentName;
             if (currentSelectedChat !== undefined && currentSelectedChat.length > 0) {
@@ -199,7 +201,7 @@ export function Sidebar(props: {
                     .catch(e => console.error(e));
             }
         }
-    }, [props.messages, props.loadingMessages]);
+    }, [props.messages, props.loadingMessages, props.status]);
 
     useEffect(() => {
         const fetchFolders = async () => {

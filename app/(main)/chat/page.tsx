@@ -68,7 +68,7 @@ const Page = () => {
   return (
     <div className={`w-full h-full flex`}>
       <div className='w-3/4 relative'>
-        <Header title='New Conversation' totalMessages={messages.length} />
+        <Header title='New Conversation' totalMessages={messages.length + 1} />
         <div className='flex-1 overflow-auto overflow-x-hidden p-5 pb-10 relative overscroll-none h-[490px] scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-white'>
           <div
             className={clsx(
@@ -185,6 +185,7 @@ const Page = () => {
         messages={messages}
         setCurrentThreadId={setCurrentThreadId}
         loadingMessages={loadingMessages}
+        status={status}
         currentThreadId={currentThreadId}
         setSelectedFolderId={setSelectedFolderId}
         selectedFolderId={selectedFolderId}

@@ -73,10 +73,10 @@ export const newChatCreateResponse = z.union([
     z.object({
         message: z.array(
             z.object({
+                folderId: z.number(),
                 id: z.number(),
                 name: z.string(),
-                folderId: z.number(),
-                createdAt: z.union([z.instanceof(Date), z.null()]),
+                createdAt: z.union([z.instanceof(Date), z.string(), z.null()]),
                 threadId: z.string().nullable()
             })
         )
