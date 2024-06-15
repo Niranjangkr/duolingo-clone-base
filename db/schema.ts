@@ -2,6 +2,7 @@ import { relations } from "drizzle-orm";
 import {
   boolean,
   integer,
+  jsonb,
   pgEnum,
   pgTable,
   serial,
@@ -185,3 +186,34 @@ export const chatThreadsRelations = relations(chatThreads, ({ one }) => ({
     references: [chatFolders.id],
   })
 }))
+
+
+export const userCourses = pgTable("userCourses", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id").notNull(),
+  courseData: jsonb("course_data").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const userCourseProgress = pgTable("user_course_progress", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id").notNull(),
+  userCourseId: integer("user_course_id")
+    .references(() => userCourses.id, {
+      onDelete: "cascade"
+    })
+    .notNull(),
+  level: text("level").notNull(),
+  questionIndex: integer("question_index").notNull(),
+});
+
+export const userCoursesRelations = relations(userCourses, ({ many }) => ({
+  userCourseProgress: many(userCourseProgress), 
+}));
+
+export const userCourseProgressRelations = relations(userCourseProgress, ({ one }) => ({
+  userCourses: one(userCourses, {
+    fields: [userCourseProgress.userCourseId],
+    references: [userCourses.id],
+  })
+}));

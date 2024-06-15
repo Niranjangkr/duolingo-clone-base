@@ -1,5 +1,29 @@
 import { z } from "zod"
 
+export type Quiz = {
+    question: string,
+    options: string[],
+    correct_answer: string,
+    explanation: string,
+}
+
+export type Unit = {
+    basic: Quiz[],
+    intermediate: Quiz[],
+    advanced: Quiz[]
+}
+
+export type CourseDataType = {
+    [key: string]: Unit
+}
+
+export interface Course {
+    courseData: CourseDataType | null,
+    createdAt: string,
+    userId: string,
+    id: string
+}
+
 export const threadSchema = z.array(
     z.object({
         folderId: z.number(),

@@ -32,7 +32,7 @@ export const Sidebar = ({ className }: SidebarProps) => {
       <div className="flex flex-1 flex-col gap-y-2">
         <SidebarItem label="Chat" href="/chat" iconSrc="/chat.png" />
         <SidebarItem label="Learn" href="/learn" iconSrc="/learn.svg" />
-        <SidebarItem label="Course" href="#" iconSrc="/learn2.svg" />
+        <SidebarItem label="Course" href="/course2" iconSrc="/learn2.svg" />
         <SidebarItem
           label="Leaderboard"
           href="/leaderboard"
