@@ -25,6 +25,8 @@ const Page = () => {
   const [currentThreadId, setCurrentThreadId] = useState<string | undefined>();
   const [selectedFolderId, setSelectedFolderId] = useState<number | undefined>();
   const [foldersData, setFoldersData] = useState<foldersType[] | null>(null);
+  const [isBottomVisible, setIsBottomVisible] = useState<boolean>(true);
+  const scrollToBottom = useRef<HTMLDivElement | null>(null);
 
   const { messages, input, setInput, submitMessage, threadId, loadingMessages, setThreadId, status, setMessages } = useAssistant({
     onError(error) {
@@ -38,6 +40,34 @@ const Page = () => {
   useEffect(() => {
     setCurrentThreadId(threadId);
   }, [threadId]);
+
+  useEffect(() => {
+    if(scrollToBottom.current){
+      scrollToBottom.current.scrollIntoView({behavior: "smooth"});
+    }
+  }, [messages]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsBottomVisible(entry.isIntersecting);
+      },
+      {
+        root: null,
+        threshold: 0,
+      }
+    );
+
+    if(scrollToBottom.current){
+      observer.observe(scrollToBottom.current);
+    }
+
+    return () => {
+      if(scrollToBottom.current){
+        observer.unobserve(scrollToBottom.current);
+      }
+    }
+  }, []);
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -63,6 +93,12 @@ const Page = () => {
       await submitMessage(input, selectedFolderId, currentThreadId);
     }
     setInput("");
+  }
+
+  const handleScrollToBottom = () => {
+    if(scrollToBottom.current){
+      scrollToBottom.current.scrollIntoView({behavior: "smooth"});
+    }
   }
 
   return (
@@ -121,9 +157,10 @@ const Page = () => {
               :
               <></>
           }
+          <div ref={scrollToBottom}></div>
         </div>
         <div className={`absolute bottom-0 flex w-full flex-col space-y-3 bg-gradient-to-b from-transparent p-5 pb-3 sm:px-0 left-0 border-t-2 bg-white`}>
-          <ChatActions />
+          <ChatActions isBottomVisible={isBottomVisible} handleScrollToBottom={handleScrollToBottom} />
           <form
             ref={formRef}
             onSubmit={(event) => {
