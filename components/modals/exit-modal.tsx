@@ -64,7 +64,7 @@ export const ExitModal = () => {
               size="lg"
               onClick={() => {
                 close();
-                router.push("/learn");
+                router.push("/course2");
               }}
             >
               End session

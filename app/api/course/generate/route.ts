@@ -1,5 +1,5 @@
 import db from "@/db/drizzle";
-import { userCourses } from "@/db/schema";
+import { userCourseProgress, userCourses } from "@/db/schema";
 import { auth } from "@clerk/nextjs";
 import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
@@ -43,7 +43,16 @@ export async function POST(request: NextRequest) {
                 createdAt: new Date(),
             })
             .returning()
-        
+
+        await db
+            .insert(userCourseProgress)
+            .values({
+                userCourseId: data[0].id,
+                userId: userId,
+                level: "basic",
+                questionIndex: 0,
+            })
+
         return NextResponse.json({
             success: true,
             data: data

@@ -15,7 +15,9 @@ type LessonButtonProps = {
   totalCount: number;
   locked?: boolean;
   current?: boolean;
-  percentage: number;
+  questionIndex: number | undefined;
+  userProgressLevel: string | undefined;
+  currenLevel: string
 };
 
 export const LessonButton = ({
@@ -24,7 +26,9 @@ export const LessonButton = ({
   totalCount,
   locked,
   current,
-  percentage,
+  questionIndex,
+  userProgressLevel,
+  currenLevel
 }: LessonButtonProps) => {
   const cycleLength = 8;
   const cycleIndex = index % cycleLength;
@@ -40,17 +44,55 @@ export const LessonButton = ({
 
   const isFirst = index === 0;
   const isLast = index === totalCount;
-  const isCompleted = !current && !locked;
+  // const isCompleted = !current && !locked;
+  let isCompleted = false;
 
+  if (typeof questionIndex === "number") {
+    if (currenLevel === "basic" && userProgressLevel === "basic") {
+      if (index < questionIndex) {
+        isCompleted = true;
+      }
+    } else if(currenLevel === "basic" && userProgressLevel != "basic") {
+      isCompleted = true;
+    }
+
+    if (currenLevel === "intermediate" && userProgressLevel === "intermediate") {
+      if (index < questionIndex) {
+        isCompleted = true;
+      }
+    } else if (currenLevel === "intermediate" && userProgressLevel === "basic") {
+      isCompleted = false;
+    } else if (currenLevel === "intermediate" && userProgressLevel === "advanced") {
+      isCompleted = true;
+    }
+
+    if(currenLevel === "advanced" && userProgressLevel === "advanced"){
+      if (index < questionIndex) {
+        isCompleted = true;
+      }
+    } else if (currenLevel === "advanced" && userProgressLevel === "basic") {
+      isCompleted = false;
+    } else if (currenLevel === "advanced" && userProgressLevel === "intermediate") {
+      isCompleted = false;
+    }
+  }
+  
+
+  // if(currenLevel === "intermediate"){
+  //   console.log(`index: ${index}, questionIndex: ${questionIndex}, isComleted: ${isCompleted}`)
+  // }
   const Icon = isCompleted ? Check : isLast ? Crown : Star;
 
-  const href = isCompleted ? `/lesson/${id}` : "/lesson";
+  const href = isCompleted ? `/practice/${id.toString()}/${index}/${currenLevel}` : `/lesson2/${id.toString()}`;
+  if(currenLevel === "advanced" && userProgressLevel === "advanced"){
+    console.log(`index: ${index}, questionIndex: ${questionIndex}, isComleted: ${isCompleted}`)
+  }
 
   return (
     <Link
       href={href}
       aria-disabled={locked}
-      style={{ pointerEvents: locked ? "none" : "auto" }}
+      // style={{ pointerEvents: locked ? "none" : "auto" }}
     >
       <div
         className="relative"
@@ -69,7 +111,7 @@ export const LessonButton = ({
               />
             </div>
             <CircularProgressbarWithChildren
-              value={Number.isNaN(percentage) ? 0 : percentage}
+              value={Number.isNaN(50) ? 0 : 50}
               styles={{
                 path: {
                   stroke: "#4ade80",
@@ -99,15 +141,15 @@ export const LessonButton = ({
         ) : (
           <Button
             size="rounded"
-            variant={locked ? "locked" : "secondary"}
+            variant={isCompleted ? "secondary" : "locked"}
             className="h-[70px] w-[70px] border-b-8"
           >
             <Icon
               className={cn(
                 "h-10 w-10",
-                locked
-                  ? "fill-neutral-400 stroke-neutral-400 text-neutral-400"
-                  : "fill-primary-foreground text-primary-foreground",
+                isCompleted
+                  ? "fill-primary-foreground text-primary-foreground"
+                  : "fill-neutral-400 stroke-neutral-400 text-neutral-400",
                 isCompleted && "fill-none stroke-[4]"
               )}
             />

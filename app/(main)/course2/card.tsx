@@ -12,7 +12,6 @@ export const Card = ({ idx, data }: { idx: number, data: Course }) => {
     null;
     
   const { setSelectedCourse, selectedCourse } = useSelectedCourseDetails();
-  console.log(data, "cardData");
   return (
     <div
       key={idx}

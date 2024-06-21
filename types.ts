@@ -1,5 +1,12 @@
 import { z } from "zod"
 
+export type Level = "basic" | "intermediate" | "advanced";
+
+export type userCourseProgressType2 = {
+    level: string,
+    questionIndex: number
+}
+
 export type Quiz = {
     question: string,
     options: string[],
@@ -11,6 +18,14 @@ export type Unit = {
     basic: Quiz[],
     intermediate: Quiz[],
     advanced: Quiz[]
+}
+
+export type UserCourseProgressType = {
+    level: string;
+    id: number;
+    userId: string;
+    userCourseId: number;
+    questionIndex: number;
 }
 
 export type CourseDataType = {

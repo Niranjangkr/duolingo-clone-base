@@ -11,6 +11,8 @@ import {
   courses,
   lessons,
   units,
+  userCourseProgress,
+  userCourses,
   userProgress,
   userSubscription,
 } from "./schema";
@@ -290,3 +292,32 @@ export const getThreadsInFolder = cache(async (folderId: number) => {
 
 //   return newThread;
 // }
+
+
+export const getUserCourseById = cache(async (courseId: number) => {
+  const data = await db.query.userCourses.findFirst({
+    where: eq(userCourses.id, courseId),
+  });
+
+  return data;
+});
+
+export const getUserCourseProgressById = cache(async (courseProgressId: number) => {
+  const data = await db.query.userCourseProgress.findFirst({
+    where: eq(userCourseProgress.id, courseProgressId),
+  });
+
+  return data;
+});
+
+
+export const getUserCourseProgressByCourseId = cache(async (courseId: number) => {
+  const { userId } = auth();
+
+  if (!userId) return [];
+  const data = await db.query.userCourseProgress.findFirst({
+    where: eq(userCourseProgress.userCourseId, courseId),
+  });
+
+  return data;
+});

@@ -2,21 +2,20 @@ import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
-import { useSelectedCourseDetails } from "@/store/useSelectedCourseDetails";
+import { CourseDataType } from "@/types";
 
 type HeaderProps = {
-  title: string;
+  data: CourseDataType | unknown,
 };
 
-export const Header = ({ title }: HeaderProps) => {
-  const { setSelectedCourse, selectedCourse } = useSelectedCourseDetails();
-
-  const courseDataArr = selectedCourse.courseData ?
-    Object.entries(selectedCourse.courseData).map(([courseName, courseContent]) => ({
+export const Header = ({ data }: HeaderProps) => {
+  const courseDataArr = data ?
+    Object.entries(data).map(([courseName, courseContent]) => ({
       courseName,
       courseContent
     })) :
     null;
+
   return (
     <div className="sticky top-0 mb-5 flex items-center justify-between border-b-2 bg-white pb-3 text-neutral-400 lg:z-50 lg:mt-[-28px] lg:pt-[28px]">
       <Link href="/courses">
@@ -25,7 +24,7 @@ export const Header = ({ title }: HeaderProps) => {
         </Button>
       </Link>
 
-      <h1 className="text-lg font-bold">{title}</h1>
+      <h1 className="text-lg font-bold">{courseDataArr && courseDataArr[0].courseName}</h1>
       <div aria-hidden />
     </div>
   );
