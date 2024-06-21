@@ -9,7 +9,7 @@ import db from "@/db/drizzle";
 import { getUserProgress, getUserSubscription } from "@/db/queries";
 import { challengeProgress, challenges, userProgress } from "@/db/schema";
 
-export const upsertChallengeProgress = async (userProgressId: number) => {
+export const upsertChallengeProgress = async (challengeId: number) => {
   const { userId } = auth();
 
   if (!userId) throw new Error("Unauthorized.");
