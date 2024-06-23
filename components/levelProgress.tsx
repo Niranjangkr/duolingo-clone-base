@@ -36,6 +36,7 @@ export const LevelProgress = ({ data, userProgress }: LevelProgressProps) => {
         {
           courseDataArr &&
           Object.entries(courseDataArr[0].courseContent).map(([level, questions]) => {
+            if(level == "description") return;
             let total = 0;
             let points = 0;
 

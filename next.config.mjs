@@ -1,5 +1,35 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "picsum.photos",
+        pathname: "**",
+      },
+      {
+        protocol: "https",
+        hostname: "img.clerk.com",
+        pathname: "**",
+      },
+      {
+        protocol: "https",
+        hostname: "oaidalleapiprodscus.blob.core.windows.net",
+        pathname: "**",
+      },
+      {
+        protocol: "https",
+        hostname: "logos-download.com",
+        pathname: "**",
+      },
+    ],
+    // domains: [
+    //   "picsum.photos",
+    //   "img.clerk.com",
+    //   "oaidalleapiprodscus.blob.core.windows.net",
+    //   "lh3.googleusercontent.com",
+    // ],
+  },
   async headers() {
     return [
       {

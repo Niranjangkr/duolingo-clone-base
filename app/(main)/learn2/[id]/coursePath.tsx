@@ -24,6 +24,7 @@ export const CoursePath = ({ data, userProgress, id }: CoursePathProps) => {
   return (
     courseDataArr &&
     Object.entries(courseDataArr[0].courseContent).map((item, idx) => {
+      if(item[0] === "description") return;
       let description = "";
       let activeLesson = item[0] === userProgress?.level;
       let questionIndex = userProgress?.questionIndex 
