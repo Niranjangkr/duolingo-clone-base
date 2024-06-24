@@ -40,13 +40,13 @@ export const BentoGridItem = ({
     <Card className="w-full max-w-sm bg-card text-card-foreground shadow-md hover:shadow-lg transition-shadow">
       <Link href="#" prefetch={false}>
         <CardContent className="flex flex-col justify-between h-full">
-          <div className="p-6 space-y-4">
+          <div className="p-3 space-y-4">
             <div className="flex items-center justify-between">
               <div className="inline-block rounded-lg bg-muted px-3 py-1 text-sm font-medium">Quiz Course</div>
               <ChevronRight className="h-5 w-5 text-muted-foreground" />
             </div>
             <h3 className="text-2xl font-bold">{title}t</h3>
-            <p className="text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               {description}
             </p>
           </div>

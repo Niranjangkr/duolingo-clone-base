@@ -1,19 +1,25 @@
 "use client"
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { BentoGrid, BentoGridItem } from "../components/ui/bento-grid";
 import axios from "axios";
+import { Course } from "@/types";
 
 export function Card() {
-    const fetchData = async() => {
+    const [data, setData] = useState<null | Course[]>(null);
+
+    const fetchData = async () => {
         const data = await axios.get("/api/course/getAll");
-        console.log("DDDAAATTAA: ", data, "DDDAAATTAADDDAAATTAA");
+        setData(data.data);
     }
+
 
     useEffect(() => {
         fetchData();
     }, []);
 
+
+    console.log("DDDAAATTAA: ", data, "DDDAAATTAADDDAAATTAA");
     return (
         <div>
             <div className="flex flex-col">
@@ -21,14 +27,27 @@ export function Card() {
                 <p className="text-lg text-slate-400">From critical skills to technical topics, Monaito supports your professional development.</p>
             </div>
             <BentoGrid className="max-w-4xl mx-auto md:auto-rows-[20rem] mt-8">
-                {items.map((item, i) => (
+                {/* {items.map((item, i) => (
                     <BentoGridItem
                         key={i}
                         title={item.title}
                         description={item.description}
                         className={item.className}
                     />
-                ))}
+                ))} */}
+                {
+                    data?.map((item, idx) => Object.entries(item.courseData!).map((item, idx) => {
+                        console.log(item[idx], item[1].description);
+                        return (
+                            <BentoGridItem
+                                key={idx}
+                                title={item[idx] as string}
+                                description={item[1].description || ""}
+                                className={`md:col-span-1 border-[#d1d7dc] border`}
+                            />
+                        )
+                    }))
+                }
             </BentoGrid>
         </div>
     );

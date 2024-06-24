@@ -16,6 +16,7 @@ export type Quiz = {
 
 export type Unit = {
     basic: Quiz[],
+    description: string,
     intermediate: Quiz[],
     advanced: Quiz[]
 }
