@@ -38,11 +38,20 @@ export function Card() {
                 {
                     data?.map((item, idx) => Object.entries(item.courseData!).map((item, idx) => {
                         console.log(item[idx], item[1].description);
+                        let demoDescription = "";
+                        if(item[idx] === "English Grammar"){
+                            demoDescription = "Master the rules of English grammar to enhance your writing and communication skills effectively."
+                        }else if(item[idx] === "Rust Programming Language"){
+                            demoDescription="Discover the power and safety of the Rust programming language, designed for performance and reliability in systems programming."
+                        }else if(item[idx] === "Javascript"){
+                            demoDescription="Explore the versatility of JavaScript, the essential language for dynamic and interactive web development."
+                        }
+                        
                         return (
                             <BentoGridItem
                                 key={idx}
                                 title={item[idx] as string}
-                                description={item[1].description || ""}
+                                description={item[1].description || demoDescription}
                                 className={`md:col-span-1 border-[#d1d7dc] border`}
                             />
                         )
