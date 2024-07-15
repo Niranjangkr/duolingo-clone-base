@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 type SidebarItemProps = {
   label: string;
@@ -19,10 +20,15 @@ export const SidebarItem = ({ label, iconSrc, href }: SidebarItemProps) => {
   return (
     <Button
       variant={isActive ? "sidebarOutline" : "sidebar"}
-      className="h-[52px] justify-start"
+      className={`h-[52px] justify-start ${(label === 'Quests' || label === 'Shop' || label === 'Learn') ? '' :''}`}
       asChild
+      onClick={() => {
+        if((label === 'Quests' || label === 'Shop' || label === 'Learn')){
+          toast.error('This feature is in progress')
+        }
+      }}
     >
-      <Link href={href}>
+      <Link href={(label === 'Quests' || label === 'Shop' || label === 'Learn') ? '#' : href}>
         <Image
           src={iconSrc}
           alt={label}
