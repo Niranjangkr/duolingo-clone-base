@@ -22,6 +22,7 @@ export const List = () => {
   const [topic, setTopic] = useState<string>('');
   const [courses, setCourses] = useState<Course[] | null>(null);
   const { setSelectedCourse } = useSelectedCourseDetails();
+  const [open, setOpen] = useState(false);
 
   const handleSubmit = async () => {
     if (!topic) {
@@ -32,34 +33,40 @@ export const List = () => {
     try {
       const response = await axios.post("/api/course/generate", { topic })
       toast.dismiss(toastId);
-      if(response.data.success){
+      if (response.data.success) {
         console.log(response.data);
+        toast.message("Course Successfully Created");
+        fetchData();
       }
     } catch (error) {
       toast.dismiss(toastId);
       toast.error("failed to generate course");
       console.error("Error is: ", error);
+    }finally{
+      setOpen(false);
     }
   }
 
+  const fetchData = async () => {
+    const data = await axios.get("/api/course");
+    setCourses(data.data);
+    setSelectedCourse(data.data[0]);
+  }
+
   useEffect(() => {
-    const fetchData = async() => {
-      const data = await axios.get("/api/course");
-      setCourses(data.data);
-      setSelectedCourse(data.data[0]);
-    }
     fetchData();
   }, []);
 
   return (
     <>
       <div className='flex w-full justify-end mb-5'>
-        <Dialog>
-          <DialogTrigger
-            className="bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-2 border-gray-300 rounded-lg"
-          >
-            Create Course
-          </DialogTrigger>
+        <Button
+          className="bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-2 border-gray-300 rounded-lg"
+          onClick={() => setOpen(true)}
+        >
+          Create Course
+        </Button>
+        <Dialog open={open} onOpenChange={setOpen}>
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Create a New Course</DialogTitle>
@@ -79,7 +86,7 @@ export const List = () => {
           </DialogContent>
         </Dialog>
       </div>
-      { courses && courses.map((data, idx) => (
+      {courses && courses.map((data, idx) => (
         <Card idx={idx} data={data} />
       ))}
     </>
