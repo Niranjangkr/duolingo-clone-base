@@ -18,7 +18,7 @@ import { FolderCreateResponse, folderCreateResponse } from '@/types';
 
 import Loading from './loading';
 
-const Page = ({ isPdfChat = false }) => {
+const Page = () => {
   const [placeholder, setPlaceHolder] = useState<string>(`Enter here...`);
   const formRef = useRef<HTMLFormElement>(null);
   const disabled = false; //TODO: make it a state
@@ -33,8 +33,8 @@ const Page = ({ isPdfChat = false }) => {
       toast.error("something went wrong: ");
       console.error(error);
     },
-    api: isPdfChat ? "/api/chat/pdf" :"/api/chat",
-        apiTofetchMessages: isPdfChat,
+    api: "/api/chat",
+    apiTofetchMessages: false,
     threadId: currentThreadId,
   });
 
