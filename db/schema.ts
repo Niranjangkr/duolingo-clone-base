@@ -176,6 +176,15 @@ export const chatThreads = pgTable("chat_threads", {
   createdAt: timestamp("created_at").defaultNow(),
 })
 
+export const pdfChatThreads = pgTable("pdf_chat_threads", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id").notNull(),
+  threadId: text("threadId").unique(),
+  name: text("name").notNull().default("New Chat"),
+  key: text("key").default(""),
+  createdAt: timestamp("created_at").defaultNow(),
+})
+
 export const chatFoldersRelations = relations(chatFolders, ({ many }) => ({
   chatThreads: many(chatThreads),
 }))

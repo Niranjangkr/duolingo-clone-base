@@ -7,7 +7,7 @@ import db from '@/db/drizzle';
 import { chatThreads } from '@/db/schema';
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY || ''
+  apiKey: process.env.LEARN_CHAT_OPENAI_API_KEY || ''
 })
 
 export const runtime = 'edge'

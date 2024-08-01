@@ -20,15 +20,15 @@ export const SidebarItem = ({ label, iconSrc, href }: SidebarItemProps) => {
   return (
     <Button
       variant={isActive ? "sidebarOutline" : "sidebar"}
-      className={`h-[52px] justify-start ${(label === 'Quests' || label === 'Shop' || label === 'Learn') ? '' :''}`}
+      className={`h-[52px] justify-start ${(label === 'Quests' || label === 'Shop') ? '' :''}`}
       asChild
       onClick={() => {
-        if((label === 'Quests' || label === 'Shop' || label === 'Learn')){
+        if((label === 'Quests' || label === 'Shop')){
           toast.error('This feature is in progress')
         }
       }}
     >
-      <Link href={(label === 'Quests' || label === 'Shop' || label === 'Learn') ? '#' : href}>
+      <Link className={`${(label === 'Quests' || label === 'Shop') ? 'pointer-events-none !text-slate-300' : '' }`} href={(label === 'Quests' || label === 'Shop') ? '#' : href}>
         <Image
           src={iconSrc}
           alt={label}

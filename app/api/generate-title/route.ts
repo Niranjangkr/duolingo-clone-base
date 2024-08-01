@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
         const url = 'https://api.openai.com/v1/chat/completions'
         const headers = {
             'Content-type': 'application/json',
-            'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
+            'Authorization': `Bearer ${process.env.LEARN_PDF_OPENAI_API_KEY}`
         }
         const data = {
             model: 'gpt-3.5-turbo',

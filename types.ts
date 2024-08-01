@@ -144,6 +144,20 @@ export const newChatRequest = z.object({
     folderId: z.number()
 });
 
+export const newPdfChatRequest = z.object({
+    threadId: z.string(),
+    name: z.string(),
+    key: z.string(),
+});
+
+export const pdfType = z.object({
+    id: z.number(),
+    name: z.string(),
+    threadId: z.string(),
+    key: z.string(),
+})
+
+export type PDFTYPE = z.infer<typeof pdfType>;
 export type NewChatRequest = z.infer<typeof newChatRequest>;
 export type Thread = z.infer<typeof threadSchema>
 export const fetchFolderThreadsResponseSchama = z.array(threadSchema);

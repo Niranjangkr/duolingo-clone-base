@@ -4,7 +4,7 @@ import OpenAI from 'openai';
 import { fetchChatApiRequestResponse, FetchChatApiRequest  } from "@/types";
 
 const openai = new OpenAI({
-    apiKey: process.env.LEARN_CHAT_OPENAI_API_KEY || ''
+    apiKey: process.env.LEARN_PDF_OPENAI_API_KEY || ''
 })
 
 export const runtime = 'edge'

@@ -8,6 +8,7 @@ import { FetchChatApiRequest, FetchChatApiResponse } from "@/types";
 interface useAssistantProps {
     onError: (error: Error) => void;
     api: string;
+    apiTofetchMessages: boolean;
     threadId?: string;
 }
 
@@ -44,6 +45,7 @@ interface ParsedChunk {
 export function useAssistant({
     onError,
     api,
+    apiTofetchMessages,
     threadId: initialThreadId }: useAssistantProps): useAssistantReturn {
     const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState<string>("");
@@ -58,7 +60,7 @@ export function useAssistant({
             const payload: FetchChatApiRequest = {
                 threadId: threadId
             }
-            const response = await axios.post<FetchChatApiResponse>('/api/chat/message', payload);
+            const response = await axios.post<FetchChatApiResponse>(apiTofetchMessages ? "/api/chat/pdf/message" : "/api/chat/message", payload);
             const data = response.data;
 
             if ('messages' in data && data.messages) {
@@ -85,7 +87,7 @@ export function useAssistant({
         }
     }, [threadId]);
 
-    const submitMessage = async (message: string, folderId: number, currentThread: string | undefined) => {
+    const submitMessage = async (message: string, folderId?: number, currentThread?: string | undefined) => {
         setStatus('loading');
         try {
             const userMessage: Message = { id: Date.now().toString(), role: "user", content: message };

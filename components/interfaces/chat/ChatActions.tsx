@@ -33,13 +33,6 @@ const ChatActions = ({ isBottomVisible, handleScrollToBottom }:ChatActionType) =
       />
 
       <ChatAction
-        onClick={() => console.log("promptHints")}
-        text={"Prompts"}
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        icon={PromptIcon }
-      />
-
-      <ChatAction
         onClick={() => {
          console.log("masks")
         }}

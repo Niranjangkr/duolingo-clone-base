@@ -6,7 +6,7 @@ import { chatThreads } from '@/db/schema';
 import { newChatRequest } from '@/types';
 
 const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY || ''
+    apiKey: process.env.LEARN_CHAT_OPENAI_API_KEY || ''
 })
 
 export const runtime = 'edge'

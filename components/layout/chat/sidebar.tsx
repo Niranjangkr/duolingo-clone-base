@@ -66,6 +66,7 @@ export function Sidebar(props: {
 }) {
     const [threads, setThreads] = useState<Thread[] | null | undefined>(null);
     const [loadingThreads, setThreadsLoading] = useState<boolean>(false);
+    const [threadsEmpty, setThreadsEmpty] = useState<boolean>(false);
     const [folderEdit, setFolderEdit] = useState<EditFolderState>({});
     const [folderName, setFolderName] = useState<string>("");
 
@@ -147,11 +148,16 @@ export function Sidebar(props: {
                 return;
             }
             if (data.data && data.data?.length > 0) {
-                setThreads(data.data);
+                setThreads(data.data); 
                 const defaultSelectedThreadId = data?.data[0]?.threadId;
                 if (defaultSelectedThreadId) {
                     props.setCurrentThreadId(defaultSelectedThreadId);
                     props.setThreadId(defaultSelectedThreadId);
+                }
+            }else {
+                if(data?.data?.length === 0 ){
+                    console.log("code12")
+                    handleNewChat();
                 }
             }
             setThreadsLoading(false);
@@ -202,6 +208,12 @@ export function Sidebar(props: {
             }
         }
     }, [props.messages, props.loadingMessages, props.status]);
+
+    useEffect(() => {
+        if(threads?.length === 0){
+            handleNewChat();
+        }
+    }, [threadsEmpty])
 
     useEffect(() => {
         const fetchFolders = async () => {
@@ -285,6 +297,7 @@ export function Sidebar(props: {
             toast.dismiss(toastId);
             toast.success("chat deleted");
             setThreads(prev => prev?.filter(item => item.id !== id))
+            setThreadsEmpty(prev => !prev);
             console.log(data.data);
         } else {
             toast.error("something went wrong, try later!!");
