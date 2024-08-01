@@ -95,22 +95,6 @@ export const ChatScreen = ({ isPdfChat = false, thread_Id }: Props) => {
     return (
         <>
             <div className='flex-1 overflow-auto overflow-x-hidden p-5 pb-10 relative overscroll-none h-[490px] scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-white'>
-                <div
-                    className={clsx(
-                        "flex w-full py-4 rounded-sm ",
-                    )}
-                >
-
-                    <div className={`box-border relative mt-2 rounded-lg border max-w-[500px] p-3 transition-all bg-[#f2f2f2]`}>
-                        <div className={`absolute -top-6 left-2}`}>
-                            <div>🤖</div>
-                        </div>
-                        <Markdown
-                            content={"Hello! How can I assist you today?"}
-                            loading={false}
-                        />
-                    </div>
-                </div>
                 {
                     messages.length > 0 ?
                         loadingMessages ? <Loading /> :

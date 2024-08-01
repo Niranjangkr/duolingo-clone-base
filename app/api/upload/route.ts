@@ -36,8 +36,8 @@ export async function POST(req: NextRequest) {
         const thread = await openai.beta.threads.create({
             messages: [
                 {
-                    role: "user",
-                    content: "Summarize the PDF document and answer any questions that I ask about it.",
+                    role: "assistant",
+                    content: "Hi! I have reviewed and understood the contents of the attached PDF. Feel free to ask me anything about it to learn more about the topic.",
                     attachments: [{ file_id: openaiFile.id, tools: [{ type: "file_search" }] }],
                 }
             ]
