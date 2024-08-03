@@ -22,9 +22,9 @@ export async function POST(req: NextRequest) {
         const bytes = await file.arrayBuffer();
         const buffer = Buffer.from(bytes);
 
-        const path = join('/', 'tmp', file.name);
+        const path = join(process.cwd(), 'public', 'pdf', file.name);
         await writeFile(path, buffer);
-        
+
         const openaiFile = await openai.files.create({
             file: fs.createReadStream(path),
             purpose: 'assistants'

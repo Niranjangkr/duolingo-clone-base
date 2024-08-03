@@ -157,7 +157,14 @@ export const pdfType = z.object({
     key: z.string(),
 })
 
+export const demoPdfType = z.object({
+    id: z.number(),
+    name: z.string(),
+    key: z.string(),
+})
+
 export type PDFTYPE = z.infer<typeof pdfType>;
+export type DEMOPDFTYPE = z.infer<typeof demoPdfType>;
 export type NewChatRequest = z.infer<typeof newChatRequest>;
 export type Thread = z.infer<typeof threadSchema>
 export const fetchFolderThreadsResponseSchama = z.array(threadSchema);

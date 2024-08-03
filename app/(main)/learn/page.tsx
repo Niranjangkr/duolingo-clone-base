@@ -11,9 +11,10 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import Dropzone from "react-dropzone";
 import { Progress } from "@/components/ui/progress";
 import axios from "axios";
-import { PDFTYPE } from "@/types";
+import { DEMOPDFTYPE, PDFTYPE } from "@/types";
 import { toast } from "sonner";
 import { useUploadThing } from "@/lib/uploadthing";
+import { DemoPdfCard } from "../courses/demoPdfCards";
 
 const delay = async (ms: number) =>
   new Promise((resolve) => setTimeout(resolve, ms));
@@ -132,43 +133,70 @@ const UploadDropzone = ({
   );
 };
 
+const dataPdfLinks: DEMOPDFTYPE[] = [
+  {
+    id: 5,
+    name: "Electricity",
+    key: "605e211b-4291-4f35-8304-9e92c8107117-rlnq9b.pdf",
+  },
+  {
+    id: 7,
+    name: "How do Organisms Reproduce",
+    key: "11478608-0e22-47d1-a309-82abd41f4bdb-pjv2jb.pdf",
+  },
+  {
+    id: 8,
+    name: "Magnetic Effects of Electric Current",
+    key: "b7750360-139f-4ae2-9fdc-c7461a888d1c-kqpdut.pdf",
+  },
+  {
+    id: 9,
+    name: "Control and Coordination",
+    key: "dc1be191-bb5f-46c6-9c7e-c8da8d8e3afb-pd16c9.pdf",
+  },
+  {
+    id: 10,
+    name: "Our Environment",
+    key: "2ae99598-6f32-4e22-ae75-f29ec0b8d415-zhr11b.pdf",
+  },
+];
+
 const LearnPage = () => {
   const [selected, setSelected] = useState<PDFTYPE | null | undefined>(null);
   const [open, setOpen] = useState<boolean>(false);
-  const [pdfs, setPdfs] = useState<PDFTYPE[] | []>([
-    {
-      id: 5,
-      threadId: "thread_1kv5L9oj9yqmm92Pb8DfUkxv",
-      name: "Electricity.pdf",
-      key: "605e211b-4291-4f35-8304-9e92c8107117-rlnq9b.pdf",
-    },
-    {
-      id: 7,
-      threadId: "thread_aEQSohsLwB60yEfWhYsb3MAE",
-      name: "How do Organisms Reproduce.pdf",
-      key: "11478608-0e22-47d1-a309-82abd41f4bdb-pjv2jb.pdf",
-    },
-    {
-      id: 8,
-      threadId: "thread_nggFzbyv13urlD7IEofd3pZn",
-      name: "Magnetic Effects of Electric Current.pdf",
-      key: "b7750360-139f-4ae2-9fdc-c7461a888d1c-kqpdut.pdf",
-    },
-    {
-      id: 9,
-      threadId: "thread_qHQXoTFZDvb8exFHZTT0m5sA",
-      name: "Control and Coordination.pdf",
-      key: "dc1be191-bb5f-46c6-9c7e-c8da8d8e3afb-pd16c9.pdf",
-    },
-    {
-      id: 10,
-      threadId: "thread_CvZ1kTVUS0TSiVixfjUU5i2H",
-      name: "Our Environment.pdf",
-      key: "2ae99598-6f32-4e22-ae75-f29ec0b8d415-zhr11b.pdf",
-    },
-  ]);
+  const [pdfs, setPdfs] = useState<PDFTYPE[] | []>([]);
+  const [pdfLinks, setPdfLinks] = useState<DEMOPDFTYPE[] | []>(dataPdfLinks);
   const onClick = (id: number) => {
     setSelected(pdfs.find((pdf) => pdf.id === id));
+  };
+
+  const addDemoPdf = async (key: string, path: string) => {
+    const tid = toast.loading('uploading pdf...')
+    console.log(path, "filePath", "ANDD", key);
+
+    const response = await fetch(`/pdf/${path}.pdf`);
+    if (!response.ok) {
+      console.log("ERROR at res");
+      throw new Error(`Failed to fetch file: ${response.statusText}`);
+    }
+    const blob = await response.blob();
+
+    const data = new FormData();
+    data.append("file", blob, `${path}.pdf`);
+
+    const res = await axios.post("/api/upload/demo-pdf", data);
+
+    console.log(res.data.thread_id, res.data.fileName, "res");
+    // pass pdf url as well in future
+    const res2 = await axios.post("/api/chat/pdf/newchat", {
+      threadId: res.data.thread_id,
+      name: res.data.fileName,
+      key: key,
+    });
+    console.log(res2.data);
+    await fetchPdfData();
+
+    toast.dismiss(tid);
   };
 
   const fetchPdfData = async () => {
@@ -176,7 +204,7 @@ const LearnPage = () => {
     const res = await axios.get("/api/chat/pdf");
     console.log(res.data, "fetchdata");
     if (res.data.success) {
-      setPdfs((pre) => [...pre, ...res.data.data]);
+      setPdfs([...res.data.data]);
     } else {
       toast.error("failed loading data");
     }
@@ -184,14 +212,20 @@ const LearnPage = () => {
   };
 
   useEffect(() => {
+    setPdfLinks((prev) => 
+      prev.filter(item => !pdfs.find(pdf => pdf.key === item.key))
+    )
+  }, [pdfs]);
+
+  useEffect(() => {
     fetchPdfData();
   }, []);
 
-  console.log(pdfs, "pdfs");
+  console.log(selected, "pdfs");
 
   return selected ? (
     <div className="flex h-full w-full flex-col">
-      <Header title="Chat with PDF" />
+      <Header title="Chat with PDF" setSelected={setSelected}  />
       <div className="flex h-full w-full justify-between py-5">
         <div className="w-3/5 rounded-lg bg-slate-100 scrollbar-thin scrollbar-track-border ">
           <PDFViewer pdf_url={`https://utfs.io/f/${selected.key}`} />
@@ -212,6 +246,16 @@ const LearnPage = () => {
         <Plus />
       </Button>
       <div className="grid grid-cols-2 gap-4 pt-6 lg:grid-cols-[repeat(auto-fill,minmax(210px,1fr))]">
+        {pdfLinks.map((pdf) => (
+          <DemoPdfCard
+            key={pdf.id}
+            pdfKey={pdf.key}
+            title={pdf.name}
+            ImageIcon={FileText}
+            id={pdf.id}
+            onClick={addDemoPdf}
+          />
+        ))}
         {pdfs.map((pdf) => (
           <PdfCard
             key={pdf.id}
