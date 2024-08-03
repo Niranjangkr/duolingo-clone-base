@@ -21,7 +21,7 @@ export const DemoPdfCard = ({
   return (
     <div
       className={cn(
-        "flex h-[217px] w-[200px]  cursor-pointer flex-col items-center space-y-9 rounded-xl border-2 border-b-[4px] p-3 hover:bg-black/5 active:border-b-2"
+        "flex h-[217px] w-[200px] flex-col items-center space-y-9 rounded-xl border-2 border-b-[4px] p-3  active:border-b-2 bg-zinc-100"
       )}
     >
       <ImageIcon
