@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
         console.log(thread, thread.tool_resources?.file_search, "thread");
 
         // Clean up temporary file
-        await unlink(path)
+        // await unlink(path)
 
         return NextResponse.json({ success: true, thread_id: thread.id, fileName: openaiFile.filename }, { status: 200 });
     } catch (error) {

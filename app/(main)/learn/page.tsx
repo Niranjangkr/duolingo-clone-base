@@ -166,6 +166,7 @@ const LearnPage = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [pdfs, setPdfs] = useState<PDFTYPE[] | []>([]);
   const [pdfLinks, setPdfLinks] = useState<DEMOPDFTYPE[] | []>(dataPdfLinks);
+  const [newUdpateId, setNewUpdateId] = useState<null | number>(null);
   const onClick = (id: number) => {
     setSelected(pdfs.find((pdf) => pdf.id === id));
   };
@@ -195,10 +196,10 @@ const LearnPage = () => {
       name: res.data.fileName,
       key: key,
     });
-    console.log(res2.data);
+    
     await fetchPdfData();
-
     toast.dismiss(tid);
+    setNewUpdateId(res2.data.message[0].id)
   };
 
   const fetchPdfData = async () => {
@@ -217,7 +218,10 @@ const LearnPage = () => {
     setPdfLinks((prev) => 
       prev.filter(item => !pdfs.find(pdf => pdf.key === item.key))
     )
-  }, [pdfs]);
+    if(newUdpateId){
+      onClick(newUdpateId);
+    }
+  }, [pdfs, newUdpateId]);
 
   useEffect(() => {
     fetchPdfData();

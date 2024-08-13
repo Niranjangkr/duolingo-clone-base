@@ -31,7 +31,7 @@ export const DemoPdfCard = ({
       />
 
       <p className="mt-3 text-center w-full font-bold text-neutral-700 break-words text-sm">{title}</p>
-      <Button className="text-xs" onClick={() => onClick(pdfKey, title)}>CHECKOUT OUR COURSE</Button>
+      <Button className="text-xs" onClick={() => onClick(pdfKey, title)}>Get started</Button>
     </div>
   );
 };
