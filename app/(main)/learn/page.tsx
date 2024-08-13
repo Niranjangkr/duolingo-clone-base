@@ -51,6 +51,7 @@ const UploadDropzone = ({
       onDrop={async (acceptedFile) => {
         setIsUploading(true);
 
+       try {
         const progressInterval = startSimulatedProgrss();
         // handleFile Upload
         const uploadthingRes = await startUpload(acceptedFile);
@@ -81,9 +82,16 @@ const UploadDropzone = ({
         console.log(res2.data);
         clearInterval(progressInterval);
         setUploadProgress(100);
+        toast.success("Upload successful")
         await fetchPdfData();
 
         setOpen(false);
+       } catch (error) {
+        console.error("something went wrong: ", error);
+        toast.error("something went wrong");
+       }finally{
+        setIsUploading(false);
+       }
       }}
     >
       {({ getRootProps, getInputProps, acceptedFiles }) => (
@@ -159,6 +167,21 @@ const dataPdfLinks: DEMOPDFTYPE[] = [
     name: "Our Environment",
     key: "2ae99598-6f32-4e22-ae75-f29ec0b8d415-zhr11b.pdf",
   },
+  {
+    id: 11,
+    name: "Cost Accounting in Government",
+    key: "ea7ef057-ce1a-4a2f-9a71-4fdf90598664-xwat0s.pdf",
+  },
+  {
+    id: 12,
+    name: "Introduction to Micro Economics",
+    key: "6906ef0a-7c01-453b-9262-b0dbce7db857-p3xzlp.pdf",
+  },
+  {
+    id: 13,
+    name: "Understanding Company Law.pdf",
+    key: "7931be1d-8110-41db-9b57-43e9fcef3234-vg3vvn.pdf",
+  },
 ];
 
 const LearnPage = () => {
@@ -189,7 +212,7 @@ const LearnPage = () => {
 
     const res = await axios.post("/api/upload/demo-pdf", data);
 
-    console.log(res.data.thread_id, res.data.fileName, "res");
+    console.log(res.data.thread_id, res.data.fileName, res, "UploadRes");
     // pass pdf url as well in future
     const res2 = await axios.post("/api/chat/pdf/newchat", {
       threadId: res.data.thread_id,
