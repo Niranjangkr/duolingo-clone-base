@@ -176,7 +176,9 @@ const LearnPage = () => {
 
     const response = await fetch(`/pdf/${path}.pdf`);
     if (!response.ok) {
-      console.log("ERROR at res");
+      console.log("ERROR at res", response);
+      toast.dismiss(tid);
+      toast.error("something went wrong");
       throw new Error(`Failed to fetch file: ${response.statusText}`);
     }
     const blob = await response.blob();
