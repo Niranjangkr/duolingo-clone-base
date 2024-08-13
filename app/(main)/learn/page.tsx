@@ -179,7 +179,7 @@ const dataPdfLinks: DEMOPDFTYPE[] = [
   },
   {
     id: 13,
-    name: "Understanding Company Law.pdf",
+    name: "Understanding Company Law",
     key: "7931be1d-8110-41db-9b57-43e9fcef3234-vg3vvn.pdf",
   },
 ];
