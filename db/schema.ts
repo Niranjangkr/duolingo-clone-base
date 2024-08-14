@@ -162,7 +162,7 @@ export const chatFolders = pgTable("chat_folders", {
   userId: text("user_id").notNull(),
   name: text("name").notNull().default("New Folder"),
   createdAt: timestamp("created_at").defaultNow(),
-})
+});
 
 export const chatThreads = pgTable("chat_threads", {
   id: serial("id").primaryKey(),
@@ -174,28 +174,37 @@ export const chatThreads = pgTable("chat_threads", {
     .notNull(),
   name: text("name").notNull().default("New Chat"),
   createdAt: timestamp("created_at").defaultNow(),
-})
+});
+
+export const pdfChatFolder = pgTable("pdf_chat_folder", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id").notNull(),
+  name: text("name").notNull().default("New Folder"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
 
 export const pdfChatThreads = pgTable("pdf_chat_threads", {
   id: serial("id").primaryKey(),
   userId: text("user_id").notNull(),
   threadId: text("threadId").unique(),
+  folderId: integer("folder_id").references(() => pdfChatFolder.id, {
+    onDelete: "cascade",
+  }),
   name: text("name").notNull().default("New Chat"),
   key: text("key").default(""),
   createdAt: timestamp("created_at").defaultNow(),
-})
+});
 
 export const chatFoldersRelations = relations(chatFolders, ({ many }) => ({
   chatThreads: many(chatThreads),
-}))
+}));
 
 export const chatThreadsRelations = relations(chatThreads, ({ one }) => ({
   chatFolders: one(chatFolders, {
     fields: [chatThreads.folderId],
     references: [chatFolders.id],
-  })
-}))
-
+  }),
+}));
 
 export const userCourses = pgTable("userCourses", {
   id: serial("id").primaryKey(),
@@ -209,7 +218,7 @@ export const userCourseProgress = pgTable("user_course_progress", {
   userId: text("user_id").notNull(),
   userCourseId: integer("user_course_id")
     .references(() => userCourses.id, {
-      onDelete: "cascade"
+      onDelete: "cascade",
     })
     .notNull(),
   level: text("level").notNull(),
@@ -217,12 +226,15 @@ export const userCourseProgress = pgTable("user_course_progress", {
 });
 
 export const userCoursesRelations = relations(userCourses, ({ many }) => ({
-  userCourseProgress: many(userCourseProgress), 
+  userCourseProgress: many(userCourseProgress),
 }));
 
-export const userCourseProgressRelations = relations(userCourseProgress, ({ one }) => ({
-  userCourses: one(userCourses, {
-    fields: [userCourseProgress.userCourseId],
-    references: [userCourses.id],
+export const userCourseProgressRelations = relations(
+  userCourseProgress,
+  ({ one }) => ({
+    userCourses: one(userCourses, {
+      fields: [userCourseProgress.userCourseId],
+      references: [userCourses.id],
+    }),
   })
-}));
+);

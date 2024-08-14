@@ -19,6 +19,7 @@ export async function POST(req: NextRequest) {
     const threadId = body.threadId;
     const key = body.key;
     const name = body.name;
+    const pdfFolderId = body.pdfFolderId
 
     if (!threadId && !name && !userId) {
       return NextResponse.json({ message: "Invalid values" }, { status: 400 });
@@ -30,6 +31,7 @@ export async function POST(req: NextRequest) {
           userId: userId!,
           name: name,
           key: key,
+          folderId: pdfFolderId
         })
         .returning();
 

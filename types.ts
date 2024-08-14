@@ -148,6 +148,7 @@ export const newPdfChatRequest = z.object({
     threadId: z.string(),
     name: z.string(),
     key: z.string(),
+    pdfFolderId: z.number()
 });
 
 export const pdfType = z.object({
