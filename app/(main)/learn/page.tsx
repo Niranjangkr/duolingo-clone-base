@@ -192,11 +192,6 @@ const ncertPdfLinksData: DEMOPDFTYPE[] = [
     name: "Our Environment",
     key: "2ae99598-6f32-4e22-ae75-f29ec0b8d415-zhr11b.pdf",
   },
-  {
-    id: 10,
-    name: "Our Environment",
-    key: "2ae99598-6f32-4e22-ae75-f29ec0b8d415-zhr11b.pdf",
-  },
 ];
 
 const PdfFolderCard = ({
@@ -204,12 +199,14 @@ const PdfFolderCard = ({
   data,
   setSelectedChatFolder,
   selectedChatFolder,
+  setSelectedFolder,
   setChatFolders,
 }: {
   idx: number;
   data: chatFolderType;
   setSelectedChatFolder: Dispatch<SetStateAction<number | undefined>>;
   selectedChatFolder: number;
+  setSelectedFolder: Dispatch<SetStateAction<null | chatFolderType>>;
   setChatFolders: Dispatch<SetStateAction<[] | chatFolderType[]>>;
 }) => {
   const [isEdit, setIsEdit] = useState<boolean>(false);
@@ -246,7 +243,10 @@ const PdfFolderCard = ({
   return (
     <div
       className={`flex transform cursor-pointer items-center justify-between  rounded-lg bg-zinc-100 p-3 font-semibold transition hover:bg-zinc-200 ${selectedChatFolder === data.id ? "bg-zinc-300" : ""} `}
-      onClick={() => setSelectedChatFolder(data.id)}
+      onClick={() => {
+        setSelectedChatFolder(data.id)
+        setSelectedFolder(data)
+      }}
     >
       {isEdit ? (
         <>
@@ -287,10 +287,11 @@ const LearnPage = () => {
   const [ncertPdfLinks, setNcertPdfLinks] = useState<DEMOPDFTYPE[] | []>(
     ncertPdfLinksData
   );
-  const [selectedChatFolder, setSelectedChatFolder] = useState<
-    number | undefined
-  >();
+  const [selectedChatFolder, setSelectedChatFolder] = useState<number | undefined>();
   const [chatFolders, setChatFolders] = useState<chatFolderType[] | []>([]);
+  // const [prathamChatFolder, setPrathamChatFolder] = useState<chatFolderType | null | undefined>(null);
+  // const [ncertChatFolder, setNcertChatFolder] = useState<chatFolderType | null | undefined>(null);
+  const [selectedFolder, setSelectedFolder] = useState<chatFolderType | null>(null);
   const [newUdpateId, setNewUpdateId] = useState<null | number>(null);
   const [addChatFolderModal, setAddChatFolderModal] = useState<boolean>(false);
   const [loadingPdfThreads, setLoadingPdfThreads] = useState<boolean>(false);
@@ -344,6 +345,7 @@ const LearnPage = () => {
       setChatFolders(pdfFolderRes.data.data);
       const selectedId = pdfFolderRes.data.data[0].id;
       setSelectedChatFolder(selectedId);
+      setSelectedFolder(pdfFolderRes.data.data[0]);
 
       // then fetch the pdfThreads in that folder so use effect on change of selected folder in effect fetch pdf threads
 
@@ -378,16 +380,33 @@ const LearnPage = () => {
     }
   } 
 
+  // useEffect(() => {
+  //     const prathamPdfFolder = chatFolders.find((item) => item.name.toLowerCase() === "pratham" );
+  //     const ncertPdfFolder = chatFolders.find((item) => item.name.toLowerCase() === "ncert" );
+  //     if(prathamChatFolder){
+  //       setPrathamChatFolder(prathamPdfFolder);
+  //     }else if(ncertChatFolder){
+  //       setNcertChatFolder(ncertPdfFolder);
+  //     }
+  // }, [chatFolders]);
+
   useEffect(() => {
     if (chatFolders.length > 0) {
-      if (chatFolders[0]?.id === selectedChatFolder) {
-        setPrathamPdfLinks((prev) =>
-          prev.filter((item) => !pdfs.find((pdf) => pdf.key === item.key))
-        );
-      } else if (chatFolders[1]?.id === selectedChatFolder) {
-        setNcertPdfLinks((prev) =>
-          prev.filter((item) => !pdfs.find((pdf) => pdf.key === item.key))
-        );
+      const selectedFolder = chatFolders.find((item) => item.id === selectedChatFolder); 
+      if(selectedFolder){
+        const prathamPdfFolder = selectedFolder.name.toLowerCase() === "pratham";
+        const ncertPdfFolder = selectedFolder.name.toLowerCase() === "ncert";
+        
+        if (prathamPdfFolder) {
+          setPrathamPdfLinks((prev) =>
+            prev.filter((item) => !pdfs.find((pdf) => pdf.key === item.key))
+          );
+          
+        } else if (ncertPdfFolder) {
+          setNcertPdfLinks((prev) =>
+            prev.filter((item) => !pdfs.find((pdf) => pdf.key === item.key))
+          );
+        }
       }
     }
 
@@ -440,6 +459,7 @@ const LearnPage = () => {
                     data={item}
                     key={idx}
                     setSelectedChatFolder={setSelectedChatFolder}
+                    setSelectedFolder={setSelectedFolder}
                     selectedChatFolder={selectedChatFolder}
                     setChatFolders={setChatFolders}
                   />
@@ -474,7 +494,7 @@ const LearnPage = () => {
 
             <div className="grid grid-cols-2 overflow-y-auto gap-4 pt-6 lg:grid-cols-[repeat(auto-fill,minmax(210px,1fr))]">
               {chatFolders.length > 0 &&
-              chatFolders[0]?.id === selectedChatFolder ? (
+              selectedFolder?.name.toLowerCase() === "pratham" ? (
                 prathamPdfLinks.map((pdf) => (
                   <DemoPdfCard
                     key={pdf.id}
@@ -486,7 +506,7 @@ const LearnPage = () => {
                   />
                 ))
               ) : chatFolders.length > 0 &&
-                chatFolders[1]?.id === selectedChatFolder ? (
+                selectedFolder?.name.toLowerCase() === "ncert" ? (
                 ncertPdfLinks.map((pdf) => (
                   <DemoPdfCard
                     key={pdf.id}
